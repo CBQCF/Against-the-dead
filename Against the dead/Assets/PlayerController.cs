@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        motor = GetComponent<PlayerMotor>(); 
+        motor = GetComponent<PlayerMotor>();
     }
 
     private void Update()
