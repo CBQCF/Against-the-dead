@@ -8,11 +8,9 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 velocity;
     private Vector3 rotation;
     private Vector3 cameraRotation;
-
     private CharacterController characterController;
-
     private float heightAboveGround = 0f;
-    private float jumpForce = 10f;
+    private float jumpForce = 40f;
     private bool isJumping = false;
 
     private void Start()
@@ -64,6 +62,7 @@ public class PlayerMotor : MonoBehaviour
             }
             else
             {
+                velocity.y -= 50f * Time.deltaTime;
                 characterController.Move(velocity * Time.deltaTime);
             }
         }
