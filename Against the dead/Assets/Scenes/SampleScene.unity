@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 45873300}
   - component: {fileID: 45873303}
   - component: {fileID: 45873302}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,7 +300,7 @@ GameObject:
   - component: {fileID: 209504810}
   - component: {fileID: 209504812}
   - component: {fileID: 209504811}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 438656181}
   - component: {fileID: 438656184}
   - component: {fileID: 438656183}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -806,7 +806,7 @@ GameObject:
   - component: {fileID: 1028633434}
   - component: {fileID: 1028633436}
   - component: {fileID: 1028633435}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -935,7 +935,7 @@ GameObject:
   - component: {fileID: 1212447349}
   - component: {fileID: 1212447352}
   - component: {fileID: 1212447351}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1099,7 +1099,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1616833409}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1133,7 +1133,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1773819116}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1169,9 +1169,11 @@ GameObject:
   - component: {fileID: 1947643741}
   - component: {fileID: 1947643740}
   - component: {fileID: 1947643742}
-  m_Layer: 0
+  - component: {fileID: 1947643743}
+  - component: {fileID: 1947643744}
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1218,9 +1220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39ffc70cb3fcfad4489e1a2f6eb9c320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
-  mouseSensitivityX: 7
-  mouseSensitivityY: 7
+  speed: 10
+  mouseSensitivityX: 3
+  mouseSensitivityY: 3
 --- !u!114 &1947643741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1251,6 +1253,40 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1947643743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947643734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045fdecf1faae0d4487e87ec74caff20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon:
+    name: Submachine Gun
+    damage: 10
+    range: 100
+  cam: {fileID: 209504812}
+  mask:
+    serializedVersion: 2
+    m_Bits: 2147483647
+--- !u!136 &1947643744
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947643734}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.66
+  m_Height: 1.92
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2060108458
 GameObject:
