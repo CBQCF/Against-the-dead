@@ -24,10 +24,10 @@ public class PlayerController : MonoBehaviour
         // Calculer la vitesse du mouvement de notre joueur
         float xMov = Input.GetAxisRaw("Horizontal");
         float zMov = Input.GetAxisRaw("Vertical");
-
+        
         Vector3 moveHorizontal = transform.right * xMov;
         Vector3 moveVertical = transform.forward * zMov;
-
+        
         Vector3 velocity = (moveHorizontal + moveVertical).normalized * speed;
 
         motor.Move(velocity);
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
         motor.Rotate(rotation);
 
-        // On calcule la rotation de la caméra en un Vecotr3
+        // On calcule la rotation de la camÃ©ra en un Vecotr3
         float xRot = Input.GetAxisRaw("Mouse Y");
 
         Vector3 cameraRotation = new Vector3(xRot, 0, 0) * mouseSensitivityY;
