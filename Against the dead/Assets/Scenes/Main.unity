@@ -355,7 +355,7 @@ MonoBehaviour:
   onlineScene: 
   transport: {fileID: 1266020518}
   networkAddress: localhost
-  maxConnections: 4
+  maxConnections: 100
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 2516510491654491807, guid: 453836c891fc3334a85258289d276570, type: 3}
   autoCreatePlayer: 1

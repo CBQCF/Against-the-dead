@@ -6,14 +6,14 @@ public class Player : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            float moveHorizontal = Input.GetAxis("Horizontal");
-            float moveVertical = Input.GetAxis("Vertical");
-            Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0);
+            float axisX = Input.GetAxis("Horizontal");
+            float axisY = Input.GetAxis("Vertical");
+            Vector3 movement = new Vector3(axisX, axisY, 0);
             transform.position += movement;
         }
     }
-
-    private void Update()
+    
+    void Update()
     {
         HandleMovement();
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class MyNetworkManager : NetworkManager
+public class NetManager : NetworkManager
 {
     public override void OnStartServer()
     {
