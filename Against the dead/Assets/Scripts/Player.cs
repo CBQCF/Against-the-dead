@@ -2,13 +2,16 @@ using UnityEngine;
 using Mirror;
 public class Player : NetworkBehaviour
 {
-    [SyncVar] 
-    public string name;
+    [SyncVar(hook = nameof(OnNameChange))] 
+    public string playerName;
     public override void OnStartLocalPlayer()
     {
         Camera.main.transform.SetParent(transform);
         Camera.main.transform.localPosition = new Vector3(0, 0, 0);
-        
+
+        string playername = "User" + Random.Range(100, 999);
+        SetupPlayer(playername);
+
     }
     void HandleMovement()
     {
@@ -21,7 +24,17 @@ public class Player : NetworkBehaviour
             transform.Translate(0, 0, moveZ);
         }
     }
+
+    public void OnNameChange(string _Old, string _New)
+    {
+        name = playerName;
+    }
     
+    [Command]
+    public void SetupPlayer(string playername)
+    {
+        playerName = playername;
+    }
     void Update()
     {
         HandleMovement();
