@@ -3,14 +3,13 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private float speed = 3f;
+    public float _Life;
+    
+    [SerializeField] private float speed = 3f;
 
-    [SerializeField]
-    private float mouseSensitivityX = 3f;
+    [SerializeField] private float mouseSensitivityX = 3f;
 
-    [SerializeField]
-    private float mouseSensitivityY = 3f;
+    [SerializeField] private float mouseSensitivityY = 3f;
 
     private PlayerMotor motor;
 

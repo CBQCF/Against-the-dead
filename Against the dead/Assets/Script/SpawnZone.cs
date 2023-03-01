@@ -22,7 +22,6 @@ public class SpawnZone : MonoBehaviour
             for (int i = 0; i < spawnCount; i++)
             {
                 GameObject instantiated = Instantiate(cubePrefab);
-                instantiated.AddComponent<BoxCollider>();
 
                 instantiated.transform.position = new Vector3(
                     Random.Range(transform.position.x - zoneSize.x / 2, transform.position.x + zoneSize.x / 2),

@@ -267,16 +267,24 @@ PrefabInstance:
       objectReference: {fileID: 1947643736}
     - target: {fileID: 114062226022497710, guid: a8145fd98e506094980d05080bde9072, type: 3}
       propertyPath: m_moveSpeed
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114062226022497710, guid: a8145fd98e506094980d05080bde9072, type: 3}
       propertyPath: m_controlMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114062226022497710, guid: a8145fd98e506094980d05080bde9072, type: 3}
+      propertyPath: m_attackDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114062226022497710, guid: a8145fd98e506094980d05080bde9072, type: 3}
       propertyPath: m_targetTransform
       value: 
       objectReference: {fileID: 1947643736}
+    - target: {fileID: 114062226022497710, guid: a8145fd98e506094980d05080bde9072, type: 3}
+      propertyPath: m_detectionDistance
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8145fd98e506094980d05080bde9072, type: 3}
 --- !u!1 &175224657
@@ -1298,6 +1306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39ffc70cb3fcfad4489e1a2f6eb9c320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Life: 0
   speed: 10
   mouseSensitivityX: 3
   mouseSensitivityY: 3
@@ -1365,7 +1374,7 @@ CapsuleCollider:
   m_Radius: 0.66
   m_Height: 1.92
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.15, z: 0}
 --- !u!1 &2060108458
 GameObject:
   m_ObjectHideFlags: 0

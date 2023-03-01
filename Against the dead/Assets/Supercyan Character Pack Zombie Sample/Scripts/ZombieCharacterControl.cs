@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-public class ZombieCharacterControl : MonoBehaviour
+public class ZombieCharacterControl : MonoBehaviour 
 {
     private enum ControlMode
     {
@@ -10,7 +10,7 @@ public class ZombieCharacterControl : MonoBehaviour
     [SerializeField] private float m_moveSpeed = 2;
     [SerializeField] private float m_turnSpeed = 200;
     [SerializeField] private float m_detectionDistance = 10;
-    [SerializeField] private float m_attackDistance = 1;
+    [SerializeField] private float m_attackDistance = 5;
     [SerializeField] private Animator m_animator = null;
     [SerializeField] private Rigidbody m_rigidBody = null;
     [SerializeField] private ControlMode m_controlMode = ControlMode.Tank;
@@ -23,16 +23,6 @@ public class ZombieCharacterControl : MonoBehaviour
 
     private void Awake()
     {
-        if (!m_animator)
-        {
-            m_animator = gameObject.GetComponent<Animator>();
-        }
-
-        if (!m_rigidBody)
-        {
-            m_rigidBody = gameObject.GetComponent<Rigidbody>();
-        }
-
         m_player = GameObject.FindGameObjectWithTag("Player");
     }
 
@@ -44,12 +34,22 @@ public class ZombieCharacterControl : MonoBehaviour
         if (distanceToPlayer > m_detectionDistance)
         {
             m_controlMode = ControlMode.Tank;
+            m_animator.SetFloat("distanceDetection", distanceToPlayer);
         }
         else if (distanceToPlayer > m_attackDistance)
-        {
+        {   
+            m_animator.SetFloat("distanceDetection", distanceToPlayer);
             m_controlMode = ControlMode.Direct;
         }
 
+        // Attack player when in range
+        if (distanceToPlayer <= m_attackDistance)
+        {
+            m_animator.SetFloat("distanceDetection", distanceToPlayer);
+            m_controlMode = ControlMode.Tank;
+            
+        }
+        
         switch (m_controlMode)
         {
             case ControlMode.Direct:
@@ -64,12 +64,7 @@ public class ZombieCharacterControl : MonoBehaviour
                 Debug.LogError("Unsupported state");
                 break;
         }
-
-        // Attack player when in range
-        if (distanceToPlayer <= m_attackDistance)
-        {
-            AttackPlayer();
-        }
+        
     }
 
     private void TankUpdate()
@@ -87,14 +82,14 @@ public class ZombieCharacterControl : MonoBehaviour
     private void DirectUpdate(Vector3 playerDirection)
     {
         playerDirection.y = 0;
-
-        m_currentDirection = Vector3.Slerp(m_currentDirection, playerDirection, Time.deltaTime * m_interpolation);
-        transform.rotation = Quaternion.LookRotation(m_currentDirection);
-        transform.position += transform.forward * m_moveSpeed * Time.deltaTime;
+        float distanceToPlayer = playerDirection.magnitude;
+        if (m_detectionDistance >= distanceToPlayer)
+        {
+            m_currentDirection = Vector3.Slerp(m_currentDirection, playerDirection, Time.deltaTime * m_interpolation);
+            transform.rotation = Quaternion.LookRotation(m_currentDirection);
+            transform.position += transform.forward * m_moveSpeed * Time.deltaTime;
+        }
+        
     }
-
-    private void AttackPlayer()
-    {
-        m_animator.SetTrigger("Attack");
-    }
+    
 }

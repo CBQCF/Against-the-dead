@@ -3,8 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMotor : MonoBehaviour
 {
-    [SerializeField]
-    private Camera cam;
+    [SerializeField] private Camera cam;
     private Vector3 velocity;
     private Vector3 rotation;
     private Vector3 cameraRotation;
