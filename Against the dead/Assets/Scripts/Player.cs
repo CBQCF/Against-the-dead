@@ -1,18 +1,14 @@
+using System;
 using UnityEngine;
 using Mirror;
+using Random = UnityEngine.Random;
+
 public class Player : NetworkBehaviour
 {
+    private Chat _chat;
+    
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
-    public override void OnStartLocalPlayer()
-    {
-        Camera.main.transform.SetParent(transform);
-        Camera.main.transform.localPosition = new Vector3(0, 0, 0);
-
-        string playername = "User" + Random.Range(100, 999);
-        SetupPlayer(playername);
-
-    }
     void HandleMovement()
     {
         if (isLocalPlayer)
@@ -24,19 +20,46 @@ public class Player : NetworkBehaviour
             transform.Translate(0, 0, moveZ);
         }
     }
+    
+    // Overrides
+    public override void OnStartLocalPlayer()
+    {
+        Camera.main.transform.SetParent(transform);
+        Camera.main.transform.localPosition = new Vector3(0, 0, 0);
 
+        string playername = "User" + Random.Range(100, 999);
+        SetupPlayer(playername);
+
+    }
+    
+    // Events
+    private void Awake()
+    {
+        _chat = FindObjectOfType<Chat>();
+    }
+    void Update()
+    {
+        HandleMovement();
+    }
+    
+    // Hooks
     public void OnNameChange(string _Old, string _New)
     {
         name = playerName;
     }
     
+    // Commands
     [Command]
-    public void SetupPlayer(string playername)
+    void SetupPlayer(string playername)
     {
         playerName = playername;
     }
-    void Update()
+
+    [Command]
+    public void SendChatMessage()
     {
-        HandleMovement();
+        if (_chat)
+        {
+        }
     }
 }
