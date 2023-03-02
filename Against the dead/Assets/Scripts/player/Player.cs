@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Mirror;
+using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour
@@ -9,18 +10,7 @@ public class Player : NetworkBehaviour
     
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
-    void HandleMovement()
-    {
-        if (isLocalPlayer)
-        {
-            float moveX = Input.GetAxis("Horizontal") * Time.deltaTime * 110.0f;
-            float moveZ = Input.GetAxis("Vertical") * Time.deltaTime * 4f;
 
-            transform.Rotate(0, moveX, 0);
-            transform.Translate(0, 0, moveZ);
-        }
-    }
-    
     // Overrides
     public override void OnStartLocalPlayer()
     {
@@ -30,6 +20,8 @@ public class Player : NetworkBehaviour
         string playername = "User" + Random.Range(100, 999);
         SetupPlayer(playername);
 
+        this.AddComponent<PlayerController>();
+
     }
     
     // Events
@@ -37,10 +29,7 @@ public class Player : NetworkBehaviour
     {
         _chat = FindObjectOfType<Chat>();
     }
-    void Update()
-    {
-        HandleMovement();
-    }
+    void Update() { }
     
     // Hooks
     public void OnNameChange(string _Old, string _New)
@@ -56,10 +45,11 @@ public class Player : NetworkBehaviour
     }
 
     [Command]
-    public void SendChatMessage()
+    public void SendChatMessage(string text)
     {
         if (_chat)
         {
+            Debug.Log("Sent a message" + text);
         }
     }
 }
