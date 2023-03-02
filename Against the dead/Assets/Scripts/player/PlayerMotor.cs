@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
 using UnityEngine;
 public class PlayerMotor : NetworkBehaviour
 {
@@ -8,7 +9,8 @@ public class PlayerMotor : NetworkBehaviour
     private Vector3 cameraRotation;
     private float heightAboveGround = 0f;
     private float jumpForce = 40f;
-    private bool isJumping = false; 
+    private bool isJumping = false;
+    private float maxHeadTurn = 60f;
 
     private void Start()
     {
@@ -69,8 +71,10 @@ public class PlayerMotor : NetworkBehaviour
 
     private void PerformRotation()
     {
+        float x = (cam.transform.eulerAngles - cameraRotation).x;
+        if ( x > 180f ? x-360 > -maxHeadTurn : x < maxHeadTurn)
+            cam.transform.Rotate(-cameraRotation);
         transform.Rotate(rotation);
-        cam.transform.Rotate(-cameraRotation);
     }
 
 }
