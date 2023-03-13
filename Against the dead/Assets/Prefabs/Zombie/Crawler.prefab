@@ -458,10 +458,10 @@ GameObject:
   - component: {fileID: 7531943129981000120}
   - component: {fileID: 7531943129981000123}
   - component: {fileID: 3324392024376701996}
-  - component: {fileID: 6292807559951346387}
+  - component: {fileID: 1287568349393314786}
   m_Layer: 0
   m_Name: Crawler
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -567,9 +567,9 @@ MonoBehaviour:
   sceneId: 0
   _assetId: 2774855477
   serverOnly: 0
-  visible: 0
+  visible: 2
   hasSpawned: 0
---- !u!114 &6292807559951346387
+--- !u!114 &1287568349393314786
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -578,7 +578,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1613103028034031863}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
@@ -593,10 +593,11 @@ MonoBehaviour:
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
   onlySyncOnChange: 1
-  bufferResetMultiplier: 5
-  positionSensitivity: 0.01
+  onlySyncOnChangeCorrectionMultiplier: 2
   rotationSensitivity: 0.01
-  scaleSensitivity: 0.01
+  compressRotation: 0
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!1 &1948063326585208101
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
 using Unity;
 using UnityEngine;
 
@@ -7,17 +8,12 @@ public class Zombie : NetworkBehaviour
     public float health { get; set; }
     public int damage { get; set; }
     
-    private Transform position;
+    public Transform position { get; set; }
 
-    public Zombie(float Health, int Damage, Vector3 spawn)
+    void Start()
     {
-        health = Health;
-        damage = Damage;
-        
         position = GetComponent<Transform>();
-        position.position = spawn;
     }
-
     public void Attack(Player player)
     {
         player.health -= damage;

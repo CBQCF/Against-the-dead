@@ -10,7 +10,8 @@ public class Player : NetworkBehaviour
 
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
-    public int health { get; set; }
+
+    [SyncVar] public int health;
 
     // Overrides
     public override void OnStartLocalPlayer()
@@ -46,6 +47,12 @@ public class Player : NetworkBehaviour
         playerName = playername;
     }
 
+    [Command]
+    void SetHealth(int newHealth)
+    {
+        health = newHealth;
+    }
+    
     [Command]
     public void SendChatMessage(string text)
     {

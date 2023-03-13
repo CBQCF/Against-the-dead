@@ -1,6 +1,5 @@
 using Mirror;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class SpawnZone : NetworkBehaviour
 {
@@ -14,7 +13,36 @@ public class SpawnZone : NetworkBehaviour
     private int spawnCount = 10;
     private int compteur = 0;
 
-    void Update()
+    
+    /// <summary>
+    /// Get a random Vector3 position in the ZombieSpawn zone
+    /// </summary>
+    /// <returns></returns>
+    private Vector3 randomSpawn()
+    {
+        return new Vector3(
+            Random.Range(transform.position.x - zoneSize.x / 2, transform.position.x + zoneSize.x / 2),
+            Random.Range(transform.position.y - zoneSize.y / 2, transform.position.y + zoneSize.y / 2),
+            Random.Range(transform.position.z - zoneSize.z / 2, transform.position.z + zoneSize.z / 2)
+        );
+    }
+    
+    /// <summary>
+    /// Spawn a single zombie at random coordinates
+    /// </summary>
+    /// <param name="zombie"></param>
+    void SpawnZombie(GameObject zombie)
+    {
+        Vector3 spawn = randomSpawn();
+        GameObject zomb = Instantiate(zombie, spawn, new Quaternion());
+        NetworkServer.Spawn(zomb);
+    }
+    
+    
+    /// <summary>
+    /// Spawn multiple zombies
+    /// </summary>
+    void SpawnZombies()
     {
         spawnTimer += Time.deltaTime;
         if (compteur % 5 == 0)
@@ -23,14 +51,9 @@ public class SpawnZone : NetworkBehaviour
             {
                 spawnTimer = 0f;
 
-                for (int i = 0; i < 7; i++)
+                for (int i = 0; i < 2; i++)
                 {
-                    GameObject instantiated = Instantiate(Zombie_crawler);
-                    instantiated.transform.position = new Vector3(
-                        Random.Range(transform.position.x - zoneSize.x / 2, transform.position.x + zoneSize.x / 2),
-                        Random.Range(transform.position.y - zoneSize.y / 2, transform.position.y + zoneSize.y / 2),
-                        Random.Range(transform.position.z - zoneSize.z / 2, transform.position.z + zoneSize.z / 2)
-                    );
+                    SpawnZombie(Zombie_crawler);
                 }
             }
             compteur++;
@@ -43,19 +66,17 @@ public class SpawnZone : NetworkBehaviour
 
                 for (int i = 0; i < spawnCount; i++)
                 {
-                    GameObject instantiated = Instantiate(Zombie_normal);
-
-                    instantiated.transform.position = new Vector3(
-                        Random.Range(transform.position.x - zoneSize.x / 2, transform.position.x + zoneSize.x / 2),
-                        Random.Range(transform.position.y - zoneSize.y / 2, transform.position.y + zoneSize.y / 2),
-                        Random.Range(transform.position.z - zoneSize.z / 2, transform.position.z + zoneSize.z / 2)
-                    );
+                    SpawnZombie(Zombie_normal);
                 }
             }
 
             compteur++;
         }
-        
+    }
+    [Server]
+    void Update()
+    {
+        SpawnZombies();
     }
 
 

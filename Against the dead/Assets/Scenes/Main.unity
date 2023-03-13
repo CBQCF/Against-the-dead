@@ -869,7 +869,9 @@ MonoBehaviour:
   playerPrefab: {fileID: 2516510491654491807, guid: 453836c891fc3334a85258289d276570, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 1
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 1613103028034031863, guid: 1156d38eb477a09448d206a2845aa0b6, type: 3}
+  - {fileID: 20140543043960277, guid: 3dd0f3843c7a53e4cacbf481922c52ab, type: 3}
   timeInterpolationGui: 0
 --- !u!4 &977828641
 Transform:
@@ -1016,7 +1018,7 @@ MonoBehaviour:
   sceneId: 2979769434
   _assetId: 0
   serverOnly: 1
-  visible: 0
+  visible: 1
   hasSpawned: 0
 --- !u!114 &1679869950
 MonoBehaviour:
