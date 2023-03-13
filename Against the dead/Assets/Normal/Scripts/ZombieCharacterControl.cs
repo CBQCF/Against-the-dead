@@ -10,10 +10,11 @@ public class ZombieCharacterControl : MonoBehaviour
     [SerializeField] private float m_moveSpeed = 2;
     [SerializeField] private float m_turnSpeed = 200;
     [SerializeField] private float m_detectionDistance = 10;
-    [SerializeField] private float m_attackDistance = 5;
+    [SerializeField] private float m_attackDistance = 2;
     [SerializeField] private Animator m_animator = null;
     [SerializeField] private Rigidbody m_rigidBody = null;
     [SerializeField] private ControlMode m_controlMode = ControlMode.Tank;
+    private bool should_attack = false;
 
     private float m_currentV = 0;
     private float m_currentH = 0;
@@ -34,20 +35,21 @@ public class ZombieCharacterControl : MonoBehaviour
         if (distanceToPlayer > m_detectionDistance)
         {
             m_controlMode = ControlMode.Tank;
+            m_animator.SetBool("should_attack", false);
             m_animator.SetFloat("distanceDetection", distanceToPlayer);
         }
         else if (distanceToPlayer > m_attackDistance)
         {   
             m_animator.SetFloat("distanceDetection", distanceToPlayer);
+            m_animator.SetBool("should_attack", false);
             m_controlMode = ControlMode.Direct;
         }
 
         // Attack player when in range
         if (distanceToPlayer <= m_attackDistance)
         {
-            m_animator.SetFloat("distanceDetection", distanceToPlayer);
+            m_animator.SetBool("should_attack", true);
             m_controlMode = ControlMode.Tank;
-            
         }
         
         switch (m_controlMode)

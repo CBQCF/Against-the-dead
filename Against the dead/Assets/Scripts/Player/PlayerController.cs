@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : NetworkBehaviour
 { 
-    private float speed = 3f; 
+    private float speed = 6f; 
     private float jumspeed = 8f;
     private float mouseSensitivityX = 3f; 
     private float mouseSensitivityY = 3f;
