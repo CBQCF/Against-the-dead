@@ -7,10 +7,10 @@ using Random = UnityEngine.Random;
 public class Player : NetworkBehaviour
 {
     private Chat _chat;
-    public int health { get; set; }
-    
+
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
+    public int health { get; set; }
 
     // Overrides
     public override void OnStartLocalPlayer()
@@ -22,6 +22,7 @@ public class Player : NetworkBehaviour
         SetupPlayer(playername);
 
         this.AddComponent<PlayerController>();
+        
 
     }
     
