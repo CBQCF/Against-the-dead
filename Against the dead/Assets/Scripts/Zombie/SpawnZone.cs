@@ -26,7 +26,6 @@ public class SpawnZone : NetworkBehaviour
                 for (int i = 0; i < 7; i++)
                 {
                     GameObject instantiated = Instantiate(Zombie_crawler);
-
                     instantiated.transform.position = new Vector3(
                         Random.Range(transform.position.x - zoneSize.x / 2, transform.position.x + zoneSize.x / 2),
                         Random.Range(transform.position.y - zoneSize.y / 2, transform.position.y + zoneSize.y / 2),
