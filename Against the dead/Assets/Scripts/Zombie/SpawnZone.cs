@@ -1,5 +1,7 @@
+using System;
 using Mirror;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnZone : NetworkBehaviour
 {
@@ -13,7 +15,9 @@ public class SpawnZone : NetworkBehaviour
     private int spawnCount = 10;
     private int compteur = 0;
 
-    
+    public ServerInfo serverInfo;
+
+
     /// <summary>
     /// Get a random Vector3 position in the ZombieSpawn zone
     /// </summary>
@@ -35,6 +39,7 @@ public class SpawnZone : NetworkBehaviour
     {
         Vector3 spawn = randomSpawn();
         GameObject zomb = Instantiate(zombie, spawn, new Quaternion());
+        zomb.GetComponent<ZombieCharacterControl>().serverInfo = serverInfo;
         NetworkServer.Spawn(zomb);
     }
     
@@ -77,6 +82,12 @@ public class SpawnZone : NetworkBehaviour
     void Update()
     {
         SpawnZombies();
+    }
+
+    [Server]
+    void Start()
+    {
+        serverInfo = FindObjectOfType<ServerInfo>();
     }
 
 

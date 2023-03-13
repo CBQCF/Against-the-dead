@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using Mirror;
+﻿using Mirror;
+using UnityEngine;
 
 public class ZombieCharacterControl : NetworkBehaviour
 {
@@ -9,7 +8,7 @@ public class ZombieCharacterControl : NetworkBehaviour
         Tank,
         Direct
     }
-    
+
     [SerializeField] private float m_moveSpeed = 2;
     [SerializeField] private float m_turnSpeed = 200;
     [SerializeField] private float m_detectionDistance = 10;
@@ -19,77 +18,53 @@ public class ZombieCharacterControl : NetworkBehaviour
     [SerializeField] private ControlMode m_controlMode = ControlMode.Tank;
     private bool should_attack = false;
 
+    private float m_currentV = 0;
+    private float m_currentH = 0;
     private readonly float m_interpolation = 10;
     private Vector3 m_currentDirection = Vector3.zero;
-    private List<GameObject> m_players = new List<GameObject>();
 
-    private void Awake()
-    {
-        // Find all players in the scene
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject player in players)
-        {
-            // Ignore the zombie's own player object
-            if (player != gameObject)
-            {
-                m_players.Add(player);
-            }
-        }
-    }
+    public ServerInfo serverInfo;
 
     private void FixedUpdate()
     {
-        float closestDistanceToPlayer = float.MaxValue;
-        Vector3 closestPlayerDirection = Vector3.zero;
-
+        GameObject[] m_players = serverInfo.playerList;
+        
         foreach (GameObject player in m_players)
         {
             Vector3 playerDirection = player.transform.position - transform.position;
             float distanceToPlayer = playerDirection.magnitude;
 
-            if (distanceToPlayer < m_detectionDistance && distanceToPlayer < closestDistanceToPlayer)
+            if (distanceToPlayer > m_detectionDistance)
             {
-                closestDistanceToPlayer = distanceToPlayer;
-                closestPlayerDirection = playerDirection;
+                m_controlMode = ControlMode.Tank;
+                m_animator.SetBool("should_attack", false);
+                m_animator.SetFloat("distanceDetection", distanceToPlayer);
+            }
+            else if (distanceToPlayer > m_attackDistance)
+            {
+                m_animator.SetFloat("distanceDetection", distanceToPlayer);
+                m_animator.SetBool("should_attack", false);
+                m_controlMode = ControlMode.Direct;
+            }
+
+            // Attack player when in range
+            if (distanceToPlayer <= m_attackDistance)
+            {
+                m_animator.SetBool("should_attack", true);
+                m_controlMode = ControlMode.Tank;
+            }
+
+            switch (m_controlMode)
+            {
+                case ControlMode.Direct:
+                    DirectUpdate(playerDirection);
+                    break;
+
+                case ControlMode.Tank:
+                    TankUpdate();
+                    break;
             }
         }
-
-        if (closestDistanceToPlayer == float.MaxValue)
-        {
-            // No players within detection distance
-            m_controlMode = ControlMode.Tank;
-            m_animator.SetBool("should_attack", false);
-            m_animator.SetFloat("distanceDetection", 0);
-        }
-        else if (closestDistanceToPlayer > m_attackDistance)
-        {   
-            // Player within detection distance but not attack distance
-            m_animator.SetFloat("distanceDetection", closestDistanceToPlayer);
-            m_animator.SetBool("should_attack", false);
-            m_controlMode = ControlMode.Direct;
-        }
-        else
-        {
-            // Player within attack distance
-            m_animator.SetBool("should_attack", true);
-            m_controlMode = ControlMode.Tank;
-        }
-        
-        switch (m_controlMode)
-        {
-            case ControlMode.Direct:
-                DirectUpdate(closestPlayerDirection);
-                break;
-
-            case ControlMode.Tank:
-                TankUpdate();
-                break;
-
-            default:
-                Debug.LogError("Unsupported state");
-                break;
-        }
-        
     }
 
     private void TankUpdate()
@@ -97,18 +72,21 @@ public class ZombieCharacterControl : NetworkBehaviour
         float v = 1;
         float h = 0;
 
-        m_animator.SetFloat("MoveSpeed", v);
+        m_currentV = Mathf.Lerp(m_currentV, v, Time.deltaTime * m_interpolation);
+        m_currentH = Mathf.Lerp(m_currentH, h, Time.deltaTime * m_interpolation);
 
-        m_currentDirection = Vector3.Slerp(m_currentDirection, transform.forward, Time.deltaTime * m_interpolation);
-        transform.rotation = Quaternion.LookRotation(m_currentDirection);
-        transform.position += transform.forward * m_moveSpeed * Time.deltaTime;
+        m_animator.SetFloat("MoveSpeed", m_currentV);
     }
 
     private void DirectUpdate(Vector3 playerDirection)
     {
         playerDirection.y = 0;
-        m_currentDirection = Vector3.Slerp(m_currentDirection, playerDirection, Time.deltaTime * m_interpolation);
-        transform.rotation = Quaternion.LookRotation(m_currentDirection);
-        transform.position += transform.forward * m_moveSpeed * Time.deltaTime;
+        float distanceToPlayer = playerDirection.magnitude;
+        if (m_detectionDistance >= distanceToPlayer)
+        {
+            m_currentDirection = Vector3.Slerp(m_currentDirection, playerDirection, Time.deltaTime * m_interpolation);
+            transform.rotation = Quaternion.LookRotation(m_currentDirection);
+            transform.position += transform.forward * m_moveSpeed * Time.deltaTime;
+        }
     }
 }
