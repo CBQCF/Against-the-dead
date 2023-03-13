@@ -25,7 +25,6 @@ public class Chat : NetworkBehaviour
     {
         if (_input.text != String.Empty)
         {
-            _player.SendChatMessage(_input.text);
         }
 
         _input.text = String.Empty;

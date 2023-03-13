@@ -26,5 +26,6 @@ public class PlayerCombat : NetworkBehaviour
 
     private void Shoot()
     {
+        
     }
 }

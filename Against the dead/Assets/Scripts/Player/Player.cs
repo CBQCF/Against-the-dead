@@ -11,7 +11,8 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
 
-    [SyncVar] public int health;
+    [SyncVar(hook = nameof(OnDamageTaken))] 
+    public float health;
 
     // Overrides
     public override void OnStartLocalPlayer()
@@ -27,11 +28,17 @@ public class Player : NetworkBehaviour
         this.AddComponent<PlayerCombat>();
     }
     
-    // Events
-    private void Awake()
+    // Functions
+    
+    private void OnDamageTaken(float _old, float _new)
     {
-        _chat = FindObjectOfType<Chat>();
+        if (_new <= 0)
+        {
+            NetworkServer.Destroy(this.gameObject);
+        }
     }
+    
+    // Events
     void Update() { }
     
     private void Start()
@@ -57,20 +64,5 @@ public class Player : NetworkBehaviour
     {
         health = newHealth;
     }
-    
-    [Command]
-    public void SendChatMessage(string text)
-    {
-        if (_chat)
-        {
-            Debug.Log("Sent a message" + text);
-        }
-    }
 
-    [Command]
-    public void RegisterPlayer()
-    {
-        
-    }
-    
 }

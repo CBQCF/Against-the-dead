@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Zombie : NetworkBehaviour
 {
-    [SyncVar(hook = nameof(TakeDamage))] public float health;
+    [SyncVar(hook = nameof(OnDamageTaken))] public float health;
     public int damage { get; set; }
     
     public Transform position { get; set; }
@@ -21,9 +21,9 @@ public class Zombie : NetworkBehaviour
         position = GetComponent<Transform>();
     }
 
-    private void TakeDamage()
+    private void OnDamageTaken(float _old, float _new)
     {
-        if (health <= 0)
+        if (_new <= 0)
         {
             NetworkServer.Destroy(this.gameObject);
         }
