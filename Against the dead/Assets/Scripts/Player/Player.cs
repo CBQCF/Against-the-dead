@@ -23,7 +23,8 @@ public class Player : NetworkBehaviour
         SetupPlayer(playername);
 
         this.AddComponent<PlayerController>();
-        
+        this.AddComponent<PlayerCombat>();
+
 
     }
     
