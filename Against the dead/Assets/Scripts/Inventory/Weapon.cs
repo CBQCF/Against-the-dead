@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Items.Ammunition;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "New weapon", menuName = "Create new Weapon")]
+[System.Serializable]
 public class Weapon : Item
 {
     public enum WeaponType
@@ -13,23 +14,8 @@ public class Weapon : Item
         SemiAuto,
         Auto,
     }
-    public Ammunition Ammo { get; }
-    public int Capacity { get; }
 
-    public WeaponType wpType { get; private set; }
-    
-    public Weapon(Ammunition ammo, ItemType type, string name, int capacity, WeaponType wptype)
-    {
-        name = name;
-        Ammo = ammo;
-        Capacity = capacity;
-        type = type;
-        wpType = wptype;
-    }
-
-    public void changeType(WeaponType newType)
-    {
-        wpType = newType;
-    }
-    
+    public Ammunition ammo;
+    public int capacity;
+    public WeaponType wpType;
 }
