@@ -1,13 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
+[CreateAssetMenu(fileName = "New ammunition", menuName = "Create new ammo")]
+[Serializable]
 public class Ammunition : Item
 {
     public enum Caliber
     {
-        b9, // 9mm
-        b556, // 5,56
-        b762, // 7,62
-        b308 // .308
+        b9, // 9mm (Pistol)
+        b556, // 5,56 (Saug...)
+        b762, // 7,62 (Ak)
+        b12g, // 12 gauge (Shotgun)
+        mele // Fireaxe
     }
 
     public int damage { get; }
