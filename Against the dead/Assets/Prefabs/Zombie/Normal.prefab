@@ -74,8 +74,6 @@ GameObject:
   m_Component:
   - component: {fileID: 23637077879960759}
   - component: {fileID: 118390330284181621}
-  - component: {fileID: 919121080244358474}
-  - component: {fileID: 7253299009020479133}
   m_Layer: 0
   m_Name: zombie_zombie4
   m_TagString: Untagged
@@ -179,38 +177,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.22611654, y: 0.003887251, z: 0}
     m_Extent: {x: 0.5238398, y: 0.20348991, z: 0.30575648}
   m_DirtyAABB: 0
---- !u!114 &919121080244358474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 18098199331380681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  _assetId: 1150429350
-  serverOnly: 0
-  visible: 0
-  hasSpawned: 0
---- !u!114 &7253299009020479133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 18098199331380681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 804ca036bcc6473caa807cb10b7c10ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!1 &18124531680643755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,6 +992,7 @@ GameObject:
   - component: {fileID: 132448899627130685}
   - component: {fileID: 6832357882488568171}
   - component: {fileID: 401290044245243838}
+  - component: {fileID: 2313870866963676136}
   m_Layer: 0
   m_Name: Normal
   m_TagString: Zombie
@@ -1122,6 +1089,7 @@ MonoBehaviour:
   m_animator: {fileID: 76753997730115131}
   m_rigidBody: {fileID: 37084796800533317}
   m_controlMode: 1
+  serverInfo: {fileID: 0}
 --- !u!114 &6832357882488568171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1168,6 +1136,22 @@ MonoBehaviour:
   compressRotation: 0
   positionPrecision: 0.01
   scalePrecision: 0.01
+--- !u!114 &2313870866963676136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20140543043960277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 804ca036bcc6473caa807cb10b7c10ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  health: 0
 --- !u!1 &20216721992347619
 GameObject:
   m_ObjectHideFlags: 0
