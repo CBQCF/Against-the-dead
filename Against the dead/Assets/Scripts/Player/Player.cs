@@ -26,6 +26,8 @@ public class Player : NetworkBehaviour
         
         this.AddComponent<PlayerController>();
         this.AddComponent<PlayerCombat>();
+        this.AddComponent<Inventory>();
+        this.AddComponent<ItemInteraction>();
     }
     
     // Functions

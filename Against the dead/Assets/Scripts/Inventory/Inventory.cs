@@ -48,8 +48,8 @@ public class Inventory : NetworkBehaviour
                 if (slot.item.maxStack <= slot.Amount + item.amount)
                 {
                     slot.Amount += item.amount;
-                    Destroy(item.gameObject);
                     slot.SetStats();
+                    item.DestroyItem();
                     return;
                 }
                 else
@@ -67,7 +67,8 @@ public class Inventory : NetworkBehaviour
             {
                 slot.item = item.itemStats;
                 slot.Amount = item.amount;
-                Destroy(item.gameObject);
+                slot.SetStats();
+                item.DestroyItem();
                 return;
             }
         }

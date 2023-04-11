@@ -7,4 +7,10 @@ public class ItemObject : NetworkBehaviour
 {
     public Item itemStats;
     public int amount;
+
+    [Command]
+    public void DestroyItem()
+    {
+        NetworkServer.Destroy(gameObject);
+    }
 }

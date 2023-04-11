@@ -16,7 +16,9 @@ public class ItemInteraction : NetworkBehaviour
     void Start()
     {
         cam = Camera.main.transform;
+        itemLayer = LayerMask.NameToLayer("UI");
         inventorySystem = GetComponent<Inventory>();
+        txt_HoveredItem = GameObject.FindWithTag("Main UI").transform.GetChild(1).GetComponent<TextMeshProUGUI>();
     }
 
     private void Update()
@@ -40,7 +42,7 @@ public class ItemInteraction : NetworkBehaviour
         }
         else
         {
-            txt_HoveredItem.text = string.Empty;
+            txt_HoveredItem.text = "";
         }
     }
 }
