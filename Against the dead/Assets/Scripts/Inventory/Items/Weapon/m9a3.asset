@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d6c82b453018024589d0fd0718585f6, type: 3}
   m_Name: m9a3
   m_EditorClassIdentifier: 
-  id: 0
-  name: 
+  id: 201
+  name: m9a3
   description: 
-  type: 0
+  type: 1
   rarity: 0
-  maxStack: 0
-  weight: 0
-  baseValue: 0
-  prefab: {fileID: 0}
-  icon: {fileID: 0}
+  maxStack: 1
+  weight: 3
+  baseValue: 1
+  prefab: {fileID: 1448113354875201996, guid: 5313d0423154dde468ce3d82fa8e1ebb, type: 3}
+  icon: {fileID: 2800000, guid: 0890f49e03762ca4ab5e2e816edf5094, type: 3}
   ammo: {fileID: 0}
-  capacity: 0
-  wpType: 0
+  capacity: 12
+  wpType: 1

@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: a112644cd8af4073983a796443f28e85, type: 3}
   m_Name: 762x39
-  m_EditorClassIdentifier: Assembly-CSharp::Ammunition
-  id: 204
+  m_EditorClassIdentifier: 
+  id: 104
   name: 7.62x39
   description: 
   type: 0
   rarity: 2
-  maxStack: 32
+  maxStack: 40
   weight: 1
   baseValue: 1
   prefab: {fileID: 5398486121448600040, guid: 9cf0be2ddff504949b6874bc926b796f, type: 3}

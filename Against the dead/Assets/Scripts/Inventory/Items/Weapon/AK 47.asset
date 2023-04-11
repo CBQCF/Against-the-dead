@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d6c82b453018024589d0fd0718585f6, type: 3}
   m_Name: AK 47
   m_EditorClassIdentifier: 
-  id: 0
-  name: 
+  id: 204
+  name: AK 47
   description: 
-  type: 0
-  rarity: 0
-  maxStack: 0
-  weight: 0
-  baseValue: 0
-  prefab: {fileID: 0}
-  icon: {fileID: 0}
+  type: 1
+  rarity: 3
+  maxStack: 1
+  weight: 7
+  baseValue: 1
+  prefab: {fileID: 925908716614716047, guid: 4cc482e6e01b5b7449631984e78eb89f, type: 3}
+  icon: {fileID: 2800000, guid: 559cf7b5fab24554392d8ba7b3bab91a, type: 3}
   ammo: {fileID: 0}
-  capacity: 0
-  wpType: 0
+  capacity: 30
+  wpType: 2
