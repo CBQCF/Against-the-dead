@@ -38,8 +38,11 @@ public class SpawnZone : NetworkBehaviour
     void SpawnZombie(GameObject zombie)
     {
         Vector3 spawn = randomSpawn();
-        GameObject zomb = Instantiate(zombie, spawn, new Quaternion());
-        zomb.GetComponent<ZombieCharacterControl>().serverInfo = serverInfo;
+        GameObject zomb = Instantiate(zombie, spawn, Quaternion.identity);
+        
+        ZombieCharacterControl zcc = zomb.AddComponent<ZombieCharacterControl>();
+        zcc.serverInfo = serverInfo;
+
         NetworkServer.Spawn(zomb);
     }
     

@@ -8,16 +8,10 @@ public class Zombie : NetworkBehaviour
 {
     [SyncVar(hook = nameof(OnDamageTaken))] public float health;
     public int damage { get; set; }
-    
     public Transform position { get; set; }
 
     void Start()
     {
-        if (isServer)
-        {
-            this.AddComponent<ZombieCharacterControl>();
-        }
-
         position = GetComponent<Transform>();
     }
 

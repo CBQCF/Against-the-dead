@@ -1,5 +1,7 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ZombieCharacterControl : NetworkBehaviour
 {
@@ -9,52 +11,56 @@ public class ZombieCharacterControl : NetworkBehaviour
         Direct
     }
 
-    [SerializeField] private float m_moveSpeed = 2;
-    [SerializeField] private float m_turnSpeed = 200;
-    [SerializeField] private float m_detectionDistance = 10;
-    [SerializeField] private float m_attackDistance = 2;
-    [SerializeField] private Animator m_animator = null;
-    [SerializeField] private Rigidbody m_rigidBody = null;
-    [SerializeField] private ControlMode m_controlMode = ControlMode.Tank;
-    private bool should_attack = false;
+    public float mMoveSpeed = 2;
+    public float mTurnSpeed = 200;
+    public float mDetectionDistance = 10;
+    public float mAttackDistance = 2;
+    public Animator mAnimator;
 
-    private float m_currentV = 0;
-    private float m_currentH = 0;
-    private readonly float m_interpolation = 10;
-    private Vector3 m_currentDirection = Vector3.zero;
+    private bool _shouldAttack = false;
+    private ControlMode _mControlMode = ControlMode.Tank;
+    private float _mCurrentV;
+    private float _mCurrentH;
+    private readonly float _mInterpolation = 10;
+    private Vector3 _mCurrentDirection = Vector3.zero;
 
     public ServerInfo serverInfo;
 
+    private void Awake()
+    {
+        mAnimator = GetComponent<Animator>();
+    }
+
     private void FixedUpdate()
     {
-        GameObject[] m_players = serverInfo.playerList;
+        GameObject[] mPlayers = serverInfo.playerList;
         
-        foreach (GameObject player in m_players)
+        foreach (GameObject player in mPlayers)
         {
             Vector3 playerDirection = player.transform.position - transform.position;
             float distanceToPlayer = playerDirection.magnitude;
 
-            if (distanceToPlayer > m_detectionDistance)
+            if (distanceToPlayer > mDetectionDistance)
             {
-                m_controlMode = ControlMode.Tank;
-                m_animator.SetBool("should_attack", false);
-                m_animator.SetFloat("distanceDetection", distanceToPlayer);
+                _mControlMode = ControlMode.Tank;
+                mAnimator.SetBool("should_attack", false);
+                mAnimator.SetFloat("distanceDetection", distanceToPlayer);
             }
-            else if (distanceToPlayer > m_attackDistance)
+            else if (distanceToPlayer > mAttackDistance)
             {
-                m_animator.SetFloat("distanceDetection", distanceToPlayer);
-                m_animator.SetBool("should_attack", false);
-                m_controlMode = ControlMode.Direct;
+                mAnimator.SetFloat("distanceDetection", distanceToPlayer);
+                mAnimator.SetBool("should_attack", false);
+                _mControlMode = ControlMode.Direct;
             }
 
             // Attack player when in range
-            if (distanceToPlayer <= m_attackDistance)
+            if (distanceToPlayer <= mAttackDistance)
             {
-                m_animator.SetBool("should_attack", true);
-                m_controlMode = ControlMode.Tank;
+                mAnimator.SetBool("should_attack", true);
+                _mControlMode = ControlMode.Tank;
             }
 
-            switch (m_controlMode)
+            switch (_mControlMode)
             {
                 case ControlMode.Direct:
                     DirectUpdate(playerDirection);
@@ -72,21 +78,21 @@ public class ZombieCharacterControl : NetworkBehaviour
         float v = 1;
         float h = 0;
 
-        m_currentV = Mathf.Lerp(m_currentV, v, Time.deltaTime * m_interpolation);
-        m_currentH = Mathf.Lerp(m_currentH, h, Time.deltaTime * m_interpolation);
+        _mCurrentV = Mathf.Lerp(_mCurrentV, v, Time.deltaTime * _mInterpolation);
+        _mCurrentH = Mathf.Lerp(_mCurrentH, h, Time.deltaTime * _mInterpolation);
 
-        m_animator.SetFloat("MoveSpeed", m_currentV);
+        mAnimator.SetFloat("MoveSpeed", _mCurrentV);
     }
 
     private void DirectUpdate(Vector3 playerDirection)
     {
         playerDirection.y = 0;
         float distanceToPlayer = playerDirection.magnitude;
-        if (m_detectionDistance >= distanceToPlayer)
+        if (mDetectionDistance >= distanceToPlayer)
         {
-            m_currentDirection = Vector3.Slerp(m_currentDirection, playerDirection, Time.deltaTime * m_interpolation);
-            transform.rotation = Quaternion.LookRotation(m_currentDirection);
-            transform.position += transform.forward * m_moveSpeed * Time.deltaTime;
+            _mCurrentDirection = Vector3.Slerp(_mCurrentDirection, playerDirection, Time.deltaTime * _mInterpolation);
+            transform.rotation = Quaternion.LookRotation(_mCurrentDirection);
+            transform.position += transform.forward * mMoveSpeed * Time.deltaTime;
         }
     }
 }
