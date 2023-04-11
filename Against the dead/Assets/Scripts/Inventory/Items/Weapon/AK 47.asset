@@ -22,6 +22,6 @@ MonoBehaviour:
   baseValue: 1
   prefab: {fileID: 925908716614716047, guid: 4cc482e6e01b5b7449631984e78eb89f, type: 3}
   icon: {fileID: 2800000, guid: 559cf7b5fab24554392d8ba7b3bab91a, type: 3}
-  ammo: {fileID: 0}
+  ammo: {fileID: 11400000, guid: aac6cbc2b2c1adb4c84582ecc5ebf6e7, type: 2}
   capacity: 30
   wpType: 2
