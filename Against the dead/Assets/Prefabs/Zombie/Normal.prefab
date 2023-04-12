@@ -1127,7 +1127,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  health: 0
 --- !u!1 &20216721992347619
 GameObject:
   m_ObjectHideFlags: 0

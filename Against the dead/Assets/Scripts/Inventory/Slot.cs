@@ -28,20 +28,6 @@ public class Slot : MonoBehaviour
         
         icon.texture = item.icon;
         txt_amount.text = $"{Amount}x";
-        rar.color = GetRarity(item.rarity);
-    }
-
-    Color GetRarity(Item.Rarity rarity)
-    {
-        switch (rarity)
-        {
-            case Item.Rarity.Common: return new Color(255, 255, 255);
-            case Item.Rarity.Uncommon: return new Color(0, 179, 0);
-            case Item.Rarity.Rare: return new Color(0, 0, 230);
-            case Item.Rarity.Epic: return new Color(128, 0, 255); // Purple
-            case Item.Rarity.Legendary: return new Color(255, 192, 0); // Orange
-        }
-
-        return new Color(0, 0, 0, 0);
+        rar.color = item.GetRarityColor();
     }
 }
