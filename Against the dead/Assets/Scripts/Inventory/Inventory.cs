@@ -49,7 +49,7 @@ public class Inventory : NetworkBehaviour
                 {
                     slot.Amount += item.amount;
                     slot.SetStats();
-                    item.DestroyItem();
+                    NetworkServer.Destroy(item.gameObject);
                     return;
                 }
                 else
@@ -68,7 +68,7 @@ public class Inventory : NetworkBehaviour
                 slot.item = item.itemStats;
                 slot.Amount = item.amount;
                 slot.SetStats();
-                item.DestroyItem();
+                NetworkServer.Destroy(item.gameObject);
                 return;
             }
         }
