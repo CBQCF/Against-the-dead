@@ -23,8 +23,6 @@ public class Player : NetworkBehaviour
         
         this.AddComponent<PlayerController>();
         this.AddComponent<PlayerCombat>();
-        this.AddComponent<Inventory>();
-        this.AddComponent<ItemInteraction>();
         PlayerShoot ps = this.AddComponent<PlayerShoot>();
         ps.damage = 20;
         ps.range = 100;
