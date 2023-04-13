@@ -22,6 +22,7 @@ public class Item : ScriptableObject
         Mine,
         Shoot,
         Fight,
+        None,
     }
         
     public enum ItemType

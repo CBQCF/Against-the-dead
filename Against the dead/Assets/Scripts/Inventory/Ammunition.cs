@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New ammunition", menuName = "Create new ammo")]
-[Serializable]
+[CreateAssetMenu(menuName = "Scriptable object/Ammo")]
 public class Ammunition : Item
 {
-    public int damage;
-    public int range;
+    public int Damage;
+    public int AmmoRange;
 }

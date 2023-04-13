@@ -12,16 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d6c82b453018024589d0fd0718585f6, type: 3}
   m_Name: SPAS 12
   m_EditorClassIdentifier: 
-  id: 202
-  name: SPAS 12
-  description: 
-  type: 1
-  rarity: 2
-  maxStack: 1
-  weight: 10
-  baseValue: 1
   prefab: {fileID: 4581449515556804854, guid: ff554da9f1dc16243b138b7e650f5e97, type: 3}
-  icon: {fileID: 2800000, guid: f3b6afe2e8cdf1647bf193a97c9c2c0a, type: 3}
+  type: 1
+  actionType: 2
+  range: {x: 3, y: 3, z: 3}
+  stackable: 0
+  image: {fileID: 21300000, guid: f3b6afe2e8cdf1647bf193a97c9c2c0a, type: 3}
   ammo: {fileID: 11400000, guid: 86bab569189bd6346a4b482fd0abba4e, type: 2}
   capacity: 8
   wpType: 1

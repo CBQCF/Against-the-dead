@@ -16,6 +16,8 @@ public class PlayerController : NetworkBehaviour
     private CharacterController characterController;
     private Camera cam;
 
+    public bool InInterface;
+
     private void HandleMovement()
     {
         if (characterController.isGrounded)
@@ -62,7 +64,10 @@ public class PlayerController : NetworkBehaviour
 
     private void Update()
     {
-        HandleMovement();
-        HandleRotation();
+        if (!InInterface)
+        {
+            HandleMovement();
+            HandleRotation();   
+        }
     }
 }

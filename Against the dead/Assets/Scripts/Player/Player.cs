@@ -7,7 +7,10 @@ using Random = UnityEngine.Random;
 public class Player : NetworkBehaviour
 {
     private Chat _chat;
-
+    private GameObject _mainInventory;
+    private PlayerController _pc;
+    
+    
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
 
@@ -21,7 +24,7 @@ public class Player : NetworkBehaviour
         string playername = "User" + Random.Range(100, 999);
         SetupPlayer(playername);
         
-        this.AddComponent<PlayerController>();
+        _pc = this.AddComponent<PlayerController>();
         this.AddComponent<PlayerCombat>();
         PlayerShoot ps = this.AddComponent<PlayerShoot>();
         ps.damage = 20;
@@ -29,14 +32,35 @@ public class Player : NetworkBehaviour
     }
     
     // Functions
-
+    
+    public void SwitchInventory()
+    {
+        _mainInventory.SetActive(!_mainInventory.activeInHierarchy);
+        _pc.InInterface = _mainInventory.activeInHierarchy;
+        
+        if (_mainInventory.activeInHierarchy)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
     // Events
-    void Update() { }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SwitchInventory();
+        }
+    }
     
     private void Start()
     {
         name = playerName;
         this.AddComponent<Stats>().health = 100;
+        _mainInventory = GameObject.FindGameObjectWithTag("Main UI").transform.GetChild(0).gameObject;
     }
 
     // Hooks

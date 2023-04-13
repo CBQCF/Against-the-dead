@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New weapon", menuName = "Create new Weapon")]
-[System.Serializable]
+[CreateAssetMenu(menuName = "Scriptable object/Weapon")]
 public class Weapon : Item
 {
     public enum WeaponType
