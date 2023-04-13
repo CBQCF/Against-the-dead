@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   actionType: 4
   range: {x: 3, y: 3, z: 3}
-  stackable: 1
+  maxStack: 35
   image: {fileID: 21300000, guid: 0ac01a40c7a022d4f801d0b1a7518d3b, type: 3}
   Damage: 40
   AmmoRange: 100

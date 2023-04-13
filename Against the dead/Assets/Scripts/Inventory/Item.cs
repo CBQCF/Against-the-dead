@@ -8,9 +8,7 @@ public class Item : ScriptableObject
     public ItemType type;
     public ActionType actionType;
     public Vector3Int range = new Vector3Int(3, 3, 3);
-
-    [Header("UI only")] 
-    public bool stackable = true;
+    public int maxStack;
 
     [Header("Both")] 
     public Sprite image;

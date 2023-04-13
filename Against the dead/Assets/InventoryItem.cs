@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -7,14 +8,22 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 {
     [Header("UI")]
     public Image image;
+    public TextMeshProUGUI amountText;
     
     [HideInInspector] public Transform parentAfterDrag;
     [HideInInspector] public Item item;
+    [HideInInspector] public int amount = 1;
 
     public void InitialiseItem(Item newItem)
     {
         item = newItem;
         image.sprite = newItem.image;
+    }
+
+    public void RefreshCount()
+    {
+        amountText.text = amount.ToString();
+        amountText.gameObject.SetActive(amount > 1);
     }
     
     public void OnBeginDrag(PointerEventData eventData)

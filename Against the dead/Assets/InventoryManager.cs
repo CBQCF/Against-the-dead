@@ -9,6 +9,21 @@ public class InventoryManager : NetworkBehaviour
 
     public GameObject mainInventory;
     [HideInInspector] public PlayerController pc;
+
+    private int selectedSlot;
+
+    private void Start()
+    {
+        inventorySlots[selectedSlot].Select();
+    }
+
+    private void ChangeSelectedSlot(int newSelSlot)
+    {
+        inventorySlots[selectedSlot].Deselect();
+        
+        inventorySlots[newSelSlot].Select();
+        selectedSlot = newSelSlot;
+    }
     
     void Update()
     {
@@ -16,8 +31,16 @@ public class InventoryManager : NetworkBehaviour
         {
             SwitchInventory();
         }
-    }
 
+        if (Input.inputString != null)
+        {
+            bool isNumber = int.TryParse(Input.inputString, out int number);
+            if (isNumber && number > 0 && number < 9)
+            {
+                ChangeSelectedSlot(number - 1);
+            }
+        }
+    }
     public void SwitchInventory()
     {
         mainInventory.SetActive(!mainInventory.activeInHierarchy);
@@ -33,8 +56,20 @@ public class InventoryManager : NetworkBehaviour
         }
     }
     
-    public void AddItem(Item item)
+    public bool AddItem(Item item)
     {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            InventorySlot slot = inventorySlots[i];
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null && itemInSlot.item == item && itemInSlot.amount < item.maxStack)
+            {
+                itemInSlot.amount++;
+                itemInSlot.RefreshCount();
+                return true;
+            }
+        }
+        
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InventorySlot slot = inventorySlots[i];
@@ -42,9 +77,11 @@ public class InventoryManager : NetworkBehaviour
             if (itemInSlot == null)
             {
                 SpawnItem(item, slot);
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 
     public void SpawnItem(Item item, InventorySlot slot)
@@ -52,5 +89,31 @@ public class InventoryManager : NetworkBehaviour
         GameObject itemGameObject = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = itemGameObject.GetComponent<InventoryItem>();
         inventoryItem.InitialiseItem(item);
+    }
+
+    public Item GetSelectedItem(bool use)
+    {
+        InventorySlot slot = inventorySlots[selectedSlot];
+        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+        if (itemInSlot != null)
+        {
+            if (use)
+            {
+                itemInSlot.amount--;
+                if (itemInSlot.amount <= 0)
+                {
+                    Destroy(itemInSlot.gameObject);
+                }
+                else
+                {
+                    itemInSlot.RefreshCount();
+                }
+            }
+            
+            return itemInSlot.item;
+        }
+
+        return null;
+
     }
 }
