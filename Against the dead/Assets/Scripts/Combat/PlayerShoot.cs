@@ -29,10 +29,10 @@ public class PlayerShoot : NetworkBehaviour
     {
         //muzzleFlash.Play();
         RaycastHit hit;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range) && hit.transform.tag != "Terrain")
         {
             Stats target = hit.transform.GetComponent<Stats>();
-            if (target != null)
+            if (target is not null)
             {
                 target.AddHealth(-damage);
             }

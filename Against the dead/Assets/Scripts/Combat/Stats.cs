@@ -11,10 +11,13 @@ public class Stats : NetworkBehaviour
             NetworkServer.Destroy(this.gameObject);
         }
     }
-
-    [Command(requiresAuthority = false)]
+    
     public void AddHealth(int damage)
     {
         health += damage;
+        if (health <= 0)
+        {
+            NetworkServer.Destroy(this.gameObject);
+        }
     }
 }

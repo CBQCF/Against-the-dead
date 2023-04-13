@@ -237,6 +237,7 @@ GameObject:
   - component: {fileID: 38995401}
   - component: {fileID: 38995400}
   - component: {fileID: 38995399}
+  - component: {fileID: 38995402}
   m_Layer: 5
   m_Name: DarkBackground
   m_TagString: Untagged
@@ -358,6 +359,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 38995397}
   m_CullTransparentMesh: 1
+--- !u!114 &38995402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38995397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905abc176fe228a469d0a458f5eb705f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryManager: {fileID: 1524109366}
 --- !u!1 &45185624
 GameObject:
   m_ObjectHideFlags: 0
@@ -4926,6 +4940,14 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   inventorySlots:
+  - {fileID: 2024669543}
+  - {fileID: 1258922211}
+  - {fileID: 1182416128}
+  - {fileID: 1481737979}
+  - {fileID: 733042486}
+  - {fileID: 647971807}
+  - {fileID: 886393867}
+  - {fileID: 380413950}
   - {fileID: 909911628}
   - {fileID: 1608414986}
   - {fileID: 255275233}
@@ -4950,14 +4972,6 @@ MonoBehaviour:
   - {fileID: 544932578}
   - {fileID: 1514241462}
   - {fileID: 2016838085}
-  - {fileID: 2024669543}
-  - {fileID: 1258922211}
-  - {fileID: 1182416128}
-  - {fileID: 1481737979}
-  - {fileID: 733042486}
-  - {fileID: 647971807}
-  - {fileID: 886393867}
-  - {fileID: 380413950}
   inventoryItemPrefab: {fileID: 6299638395593013112, guid: 8a00881f593712241939b81468cc139a, type: 3}
   mainInventory: {fileID: 773412016}
   pc: {fileID: 0}

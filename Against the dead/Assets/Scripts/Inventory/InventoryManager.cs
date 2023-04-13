@@ -20,11 +20,11 @@ public class InventoryManager : NetworkBehaviour
     private void ChangeSelectedSlot(int newSelSlot)
     {
         inventorySlots[selectedSlot].Deselect();
-        
+
         inventorySlots[newSelSlot].Select();
         selectedSlot = newSelSlot;
     }
-    
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -41,11 +41,12 @@ public class InventoryManager : NetworkBehaviour
             }
         }
     }
+
     public void SwitchInventory()
     {
         mainInventory.SetActive(!mainInventory.activeInHierarchy);
         pc.inInterface = mainInventory.activeInHierarchy;
-        
+
         if (mainInventory.activeInHierarchy)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -55,7 +56,7 @@ public class InventoryManager : NetworkBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
     }
-    
+
     public bool AddItem(Item item)
     {
         for (int i = 0; i < inventorySlots.Length; i++)
@@ -69,7 +70,7 @@ public class InventoryManager : NetworkBehaviour
                 return true;
             }
         }
-        
+
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InventorySlot slot = inventorySlots[i];
@@ -109,11 +110,18 @@ public class InventoryManager : NetworkBehaviour
                     itemInSlot.RefreshCount();
                 }
             }
-            
+
             return itemInSlot.item;
         }
 
         return null;
+    }
 
+    public void DropItem(InventoryItem item)
+    {
+        GameObject dropped = Instantiate(item.item.prefab);
+        dropped.transform.position = pc.transform.position;
+        Destroy(item.gameObject);
+        NetworkServer.Spawn(dropped);
     }
 }

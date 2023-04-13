@@ -23,7 +23,6 @@ public class Player : NetworkBehaviour
         SetupPlayer(playername);
         
         GameObject.Find("InventoryManager").GetComponent<InventoryManager>().pc = this.AddComponent<PlayerController>();
-        this.AddComponent<PlayerCombat>();
         PlayerShoot ps = this.AddComponent<PlayerShoot>();
         ps.damage = 20;
         ps.range = 100;
