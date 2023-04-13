@@ -17,7 +17,7 @@ public class ZombieCharacterControl : NetworkBehaviour
     public float mAttackDistance = 2;
     public Animator mAnimator;
 
-    private bool _shouldAttack = false;
+    //private bool _shouldAttack = false;
     private ControlMode _mControlMode = ControlMode.Tank;
     private float _mCurrentV;
     private float _mCurrentH;

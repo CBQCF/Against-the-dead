@@ -308,7 +308,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1524109366}
         m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
         m_MethodName: SwitchInventory
         m_Mode: 1
@@ -4959,6 +4959,8 @@ MonoBehaviour:
   - {fileID: 886393867}
   - {fileID: 380413950}
   inventoryItemPrefab: {fileID: 6299638395593013112, guid: 8a00881f593712241939b81468cc139a, type: 3}
+  mainInventory: {fileID: 773412016}
+  pc: {fileID: 0}
 --- !u!114 &1524109367
 MonoBehaviour:
   m_ObjectHideFlags: 0

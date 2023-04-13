@@ -1,40 +1,42 @@
 ﻿using Mirror;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : NetworkBehaviour
 {
-    [SerializeField] private float speed = 6f; 
-    private float jumspeed = 8f;
-    private float mouseSensitivityX = 3f; 
-    private float mouseSensitivityY = 3f;
-    private float maxHeadTurn = 60f;
-    private float gravity = 20f;
-    
-    private Vector3 moveD = Vector3.zero;
-    
-    private CharacterController characterController;
-    private Camera cam;
+    private const float Speed = 6f; 
+    private const float JumpSpeed = 8f;
+    private const float MouseSensitivityX = 3f; 
+    private const float MouseSensitivityY = 3f;
+    private const float MaxHeadTurn = 60f;
+    private const float Gravity = 20f;
 
-    public bool InInterface;
+    private Vector3 _moveD = Vector3.zero;
+    
+    private CharacterController _characterController;
+    private Camera _cam;
+
+    public bool inInterface;
 
     private void HandleMovement()
     {
-        if (characterController.isGrounded)
+        if (_characterController.isGrounded)
         {
-            moveD = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            moveD = transform.TransformDirection(moveD);
-            moveD *= speed;
+            _moveD = Vector3.zero;
+            if (!inInterface) _moveD = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            _moveD = transform.TransformDirection(_moveD);
+            _moveD *= Speed;
 
             if (Input.GetButton("Jump"))
             {
-                moveD.y = jumspeed;
+                _moveD.y = JumpSpeed;
             }
         }
 
-        moveD.y -= gravity * Time.deltaTime;
+        _moveD.y -= Gravity * Time.deltaTime;
 
-        characterController.Move(moveD * Time.deltaTime);
+        _characterController.Move(_moveD * Time.deltaTime);
     }
 
     private void HandleRotation()
@@ -42,14 +44,14 @@ public class PlayerController : NetworkBehaviour
         // Get rotations
         float yRot = Input.GetAxisRaw("Mouse X");
         float xRot = Input.GetAxisRaw("Mouse Y");
-        
-        Vector3 rotation = new Vector3(0, yRot, 0) * mouseSensitivityX;
-        Vector3 cameraRotation = new Vector3(xRot, 0, 0) * mouseSensitivityY;
-        
-        // Applying the values
-        float x = (cam.transform.eulerAngles - cameraRotation).x;
-        if ( x > 180f ? x-360 > -maxHeadTurn : x < maxHeadTurn)
-            cam.transform.Rotate(-cameraRotation);
+
+        Vector3 rotation = new Vector3(0, yRot, 0) * MouseSensitivityX;
+        Vector3 cameraRotation = new Vector3(xRot, 0, 0) * MouseSensitivityY;
+
+            // Applying the values
+        float x = (_cam.transform.eulerAngles - cameraRotation).x;
+        if ( x > 180f ? x-360 > -MaxHeadTurn : x < MaxHeadTurn)
+            _cam.transform.Rotate(-cameraRotation);
         transform.Rotate(rotation);
     }
     
@@ -58,16 +60,16 @@ public class PlayerController : NetworkBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        characterController = GetComponent<CharacterController>();
-        cam = Camera.main;
+        _characterController = GetComponent<CharacterController>();
+        _cam = Camera.main;
     }
 
     private void Update()
     {
-        if (!InInterface)
+        if (!inInterface)
         {
-            HandleMovement();
             HandleRotation();   
         }
+        HandleMovement();
     }
 }
