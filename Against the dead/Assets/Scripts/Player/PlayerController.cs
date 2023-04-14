@@ -63,7 +63,7 @@ public class PlayerController : NetworkBehaviour
     // Event function
     private void Start()
     {
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         _characterController = GetComponent<CharacterController>();
         _cam = Camera.main;
     }
