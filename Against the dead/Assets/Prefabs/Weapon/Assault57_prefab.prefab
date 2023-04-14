@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1732788503113230181}
   - component: {fileID: 5496940226496676892}
   - component: {fileID: 3114932846763734542}
-  - component: {fileID: 7329585901422719350}
+  - component: {fileID: -7396942386028355493}
   m_Layer: 0
   m_Name: Assault57_prefab
   m_TagString: Untagged
@@ -67,7 +67,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.06909804, y: 0.21526152, z: 0.90742135}
   m_Center: {x: -0.0042785965, y: -0.010336842, z: 0.0042779446}
---- !u!114 &7329585901422719350
+--- !u!114 &-7396942386028355493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -3796,6 +3796,11 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 1613103028034031863, guid: 1156d38eb477a09448d206a2845aa0b6, type: 3}
   - {fileID: 20140543043960277, guid: 3dd0f3843c7a53e4cacbf481922c52ab, type: 3}
+  - {fileID: 925908716614716047, guid: 4cc482e6e01b5b7449631984e78eb89f, type: 3}
+  - {fileID: 4581449515556804854, guid: ff554da9f1dc16243b138b7e650f5e97, type: 3}
+  - {fileID: 7485939422097835960, guid: 6e79e76ce55e3a741bbdcd47aabe969c, type: 3}
+  - {fileID: 1448113354875201996, guid: 5313d0423154dde468ce3d82fa8e1ebb, type: 3}
+  - {fileID: 289003456829574244, guid: c3a27a4d231b90248beae25cabaf1025, type: 3}
   timeInterpolationGui: 0
 --- !u!4 &977828641
 Transform:
@@ -4936,9 +4941,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f2b0631752c2c4eb1d8c6fa17b6a93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0.1
   inventorySlots:
   - {fileID: 2024669543}
   - {fileID: 1258922211}
@@ -4974,7 +4976,7 @@ MonoBehaviour:
   - {fileID: 2016838085}
   inventoryItemPrefab: {fileID: 6299638395593013112, guid: 8a00881f593712241939b81468cc139a, type: 3}
   mainInventory: {fileID: 773412016}
-  pc: {fileID: 0}
+  player: {fileID: 0}
 --- !u!114 &1524109367
 MonoBehaviour:
   m_ObjectHideFlags: 0

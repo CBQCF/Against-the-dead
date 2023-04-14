@@ -2,13 +2,13 @@ using System;
 using Mirror;
 using UnityEngine;
 
-public class InventoryManager : NetworkBehaviour
+public class InventoryManager : MonoBehaviour
 {
     public InventorySlot[] inventorySlots;
     public GameObject inventoryItemPrefab;
 
     public GameObject mainInventory;
-    [HideInInspector] public PlayerController pc;
+    [HideInInspector] public Player player;
 
     private int selectedSlot;
 
@@ -45,7 +45,7 @@ public class InventoryManager : NetworkBehaviour
     public void SwitchInventory()
     {
         mainInventory.SetActive(!mainInventory.activeInHierarchy);
-        pc.inInterface = mainInventory.activeInHierarchy;
+        player.playerController.inInterface = mainInventory.activeInHierarchy;
 
         if (mainInventory.activeInHierarchy)
         {
@@ -119,9 +119,9 @@ public class InventoryManager : NetworkBehaviour
 
     public void DropItem(InventoryItem item)
     {
-        GameObject dropped = Instantiate(item.item.prefab);
-        dropped.transform.position = pc.transform.position;
+        Vector3 spawnPos = player.transform.position + Vector3.forward * 2;
+        player.CmdSpawnItem(NetworkManager.singleton.spawnPrefabs.IndexOf(item.item.prefab), spawnPos);
+        
         Destroy(item.gameObject);
-        NetworkServer.Spawn(dropped);
     }
 }

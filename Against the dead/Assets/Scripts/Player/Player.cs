@@ -12,6 +12,10 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
 
+    public PlayerController playerController;
+    public PlayerShoot playerShoot;
+    public InventoryManager inventoryManager;
+
     // Overrides
     public override void OnStartLocalPlayer()
     {
@@ -21,11 +25,16 @@ public class Player : NetworkBehaviour
         
         string playername = "User" + Random.Range(100, 999);
         SetupPlayer(playername);
+
+
+        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        playerController = this.AddComponent<PlayerController>();
+        playerShoot = this.AddComponent<PlayerShoot>();
         
-        GameObject.Find("InventoryManager").GetComponent<InventoryManager>().pc = this.AddComponent<PlayerController>();
-        PlayerShoot ps = this.AddComponent<PlayerShoot>();
-        ps.damage = 20;
-        ps.range = 100;
+        inventoryManager.player = this;
+
+        playerShoot.damage = 20;
+        playerShoot.range = 100;
     }
     
     // Functions
@@ -47,6 +56,13 @@ public class Player : NetworkBehaviour
     void SetupPlayer(string playername)
     {
         playerName = playername;
+    }
+    
+    [Command]
+    public void CmdSpawnItem(int item, Vector3 position)
+    {
+        GameObject obj = Instantiate(NetworkManager.singleton.spawnPrefabs[item], position, Quaternion.identity);
+        NetworkServer.Spawn(obj);
     }
 
 }
