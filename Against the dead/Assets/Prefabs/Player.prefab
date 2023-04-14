@@ -56,7 +56,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   playerName: 
-  health: 0
+  playerController: {fileID: 0}
+  playerShoot: {fileID: 0}
+  inventoryManager: {fileID: 0}
+  healthBar: {fileID: 0}
 --- !u!33 &4034022968940798482
 MeshFilter:
   m_ObjectHideFlags: 0

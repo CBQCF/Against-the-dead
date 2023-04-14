@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Mirror;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour
@@ -15,6 +16,8 @@ public class Player : NetworkBehaviour
     public PlayerController playerController;
     public PlayerShoot playerShoot;
     public InventoryManager inventoryManager;
+    public PauseMenu pauseMenu;
+    public HealthBar healthBar;
 
     // Overrides
     public override void OnStartLocalPlayer()
@@ -28,10 +31,13 @@ public class Player : NetworkBehaviour
 
 
         inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        pauseMenu = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
         playerController = this.AddComponent<PlayerController>();
         playerShoot = this.AddComponent<PlayerShoot>();
-        
+        healthBar = GameObject.FindWithTag("Main UI").transform.GetChild(2).GetComponent<HealthBar>();
+
         inventoryManager.player = this;
+        pauseMenu.player = this;
 
         playerShoot.damage = 20;
         playerShoot.range = 100;
@@ -43,6 +49,7 @@ public class Player : NetworkBehaviour
     {
         name = playerName;
         this.AddComponent<Stats>().health = 100;
+        healthBar.SetMaxHealth(GetComponent<Stats>().health);
     }
 
     // Hooks
