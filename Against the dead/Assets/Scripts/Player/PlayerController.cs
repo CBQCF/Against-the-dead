@@ -7,8 +7,7 @@ public class PlayerController : NetworkBehaviour
 {
     private const float Speed = 6f; 
     private const float JumpSpeed = 8f;
-    private const float MouseSensitivityX = 3f; 
-    private const float MouseSensitivityY = 3f;
+    public static float MouseSensitivity = 3f;
     private const float MaxHeadTurn = 60f;
     private const float Gravity = 20f;
 
@@ -18,6 +17,11 @@ public class PlayerController : NetworkBehaviour
     private Camera _cam;
 
     public bool inInterface;
+
+    public void SetSensitivity(float sensi)
+    {
+        MouseSensitivity = sensi;
+    }
 
     private void HandleMovement()
     {
@@ -45,8 +49,8 @@ public class PlayerController : NetworkBehaviour
         float yRot = Input.GetAxisRaw("Mouse X");
         float xRot = Input.GetAxisRaw("Mouse Y");
 
-        Vector3 rotation = new Vector3(0, yRot, 0) * MouseSensitivityX;
-        Vector3 cameraRotation = new Vector3(xRot, 0, 0) * MouseSensitivityY;
+        Vector3 rotation = new Vector3(0, yRot, 0) * MouseSensitivity;
+        Vector3 cameraRotation = new Vector3(xRot, 0, 0) * MouseSensitivity;
 
             // Applying the values
         float x = (_cam.transform.eulerAngles - cameraRotation).x;
@@ -59,7 +63,7 @@ public class PlayerController : NetworkBehaviour
     // Event function
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         _characterController = GetComponent<CharacterController>();
         _cam = Camera.main;
     }
