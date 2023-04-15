@@ -62,12 +62,20 @@ public class Player : NetworkBehaviour
     {
         playerName = playername;
     }
-    
+
     [Command]
-    public void CmdSpawnItem(int item, Vector3 position)
+    public void CmdSpawnItem(int item, int amount, Vector3 position)
     {
         GameObject obj = Instantiate(NetworkManager.singleton.spawnPrefabs[item], position, Quaternion.identity);
+        obj.GetComponent<ItemData>().amount = amount;
         NetworkServer.Spawn(obj);
+    }
+
+    [Command]
+    public void DestroyItem(uint id)
+    {
+        
+        NetworkServer.Destroy(NetworkServer.spawned[id].gameObject);
     }
 
 }

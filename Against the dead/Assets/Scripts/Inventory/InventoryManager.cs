@@ -1,5 +1,6 @@
 using System;
 using Mirror;
+using TMPro;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -8,13 +9,18 @@ public class InventoryManager : MonoBehaviour
     public GameObject inventoryItemPrefab;
 
     public GameObject mainInventory;
+    public TextMeshProUGUI interactionText;
     [HideInInspector] public Player player;
 
+
+    private Camera mainCamera;
+    private int pickupRange = 3;
     private int selectedSlot;
 
     private void Start()
     {
         inventorySlots[selectedSlot].Select();
+        mainCamera = Camera.main;
     }
 
     private void ChangeSelectedSlot(int newSelSlot)
@@ -40,8 +46,41 @@ public class InventoryManager : MonoBehaviour
                 ChangeSelectedSlot(number - 1);
             }
         }
-    }
 
+        RaycastHit lookat;
+        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out lookat, pickupRange))
+        {
+            ItemData item = lookat.transform.gameObject.GetComponent<ItemData>();
+            if (item is not null)
+            {
+                interactionText.gameObject.SetActive(true);
+                interactionText.text = item.ToString();
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    PickupItem(item);
+                }
+            }
+            else
+            {
+                interactionText.gameObject.SetActive(false);
+            }
+        }
+    }
+    
+    public void PickupItem(ItemData itemData)
+    {
+        if (AddItem(itemData.item))
+        {
+            player.DestroyItem(itemData.gameObject.GetComponent<NetworkIdentity>().netId);
+        }
+        else
+        {
+            
+        }
+    }
+    
+    
+    
     public void SwitchInventory()
     {
         mainInventory.SetActive(!mainInventory.activeInHierarchy);
@@ -120,8 +159,7 @@ public class InventoryManager : MonoBehaviour
     public void DropItem(InventoryItem item)
     {
         Vector3 spawnPos = player.transform.position + player.transform.forward * 2;
-        player.CmdSpawnItem(NetworkManager.singleton.spawnPrefabs.IndexOf(item.item.prefab), spawnPos);
-        
+        player.CmdSpawnItem(NetworkManager.singleton.spawnPrefabs.IndexOf(item.item.prefab), item.amount, spawnPos);
         Destroy(item.gameObject);
     }
 }
