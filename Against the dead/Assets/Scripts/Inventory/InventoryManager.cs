@@ -119,7 +119,7 @@ public class InventoryManager : MonoBehaviour
 
     public void DropItem(InventoryItem item)
     {
-        Vector3 spawnPos = player.transform.position + Vector3.forward * 2;
+        Vector3 spawnPos = player.transform.position + player.transform.forward * 2;
         player.CmdSpawnItem(NetworkManager.singleton.spawnPrefabs.IndexOf(item.item.prefab), spawnPos);
         
         Destroy(item.gameObject);
