@@ -12,10 +12,13 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
 
+    public Camera camera;
+    
     public PlayerController playerController;
     public PlayerShoot playerShoot;
     public InventoryManager inventoryManager;
     public Stats stats;
+    public PlayerWeapon playerWeapon;
     
     
     // Overrides
@@ -37,11 +40,11 @@ public class Player : NetworkBehaviour
         stats.healthBar = GameObject.FindWithTag("Main UI").transform.GetChild(2).GetComponent<HealthBar>();
         stats.healthBar.SetMaxHealth(stats.health);
         
+        playerWeapon.SyncWeapon();
+        
         inventoryManager.player = this;
-
-        playerShoot.damage = 20;
-        playerShoot.range = 100;
     }
+    
     
     // Functions
 
@@ -49,6 +52,7 @@ public class Player : NetworkBehaviour
     {
         name = playerName;
     }
+
 
     // Hooks
     public void OnNameChange(string _Old, string _New)
@@ -72,10 +76,17 @@ public class Player : NetworkBehaviour
     }
 
     [Command]
-    public void DestroyItem(uint id)
+    public void Destroy(uint id)
     {
         
         NetworkServer.Destroy(NetworkServer.spawned[id].gameObject);
+    }
+
+    [Command]
+    public void SpawnInHands(int inHands)
+    {
+        GameObject item = Instantiate(NetworkManager.singleton.spawnPrefabs[inHands], transform);
+        NetworkServer.Spawn(item, new LocalConnectionToClient());
     }
 
 }

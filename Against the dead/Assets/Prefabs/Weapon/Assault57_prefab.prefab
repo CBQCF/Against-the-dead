@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3114932846763734542}
   - component: {fileID: -7396942386028355493}
   - component: {fileID: -4278180449657768654}
+  - component: {fileID: 8861906902432737865}
   m_Layer: 0
   m_Name: Assault57_prefab
   m_TagString: Untagged
@@ -100,8 +101,28 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  item: {fileID: 11400000, guid: 996ccb5ccce2e76479ab0e7bf5d3659a, type: 2}
+  item: {fileID: 11400000, guid: 3ebff6a8a967737498e78ed09cb0f29d, type: 2}
   amount: 0
+--- !u!114 &8861906902432737865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925908716614716047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758a0982707c2dd4a928935a03d11b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  MagSize: 30
+  ammoInMag: 0
+  ammo: {fileID: 11400000, guid: aac6cbc2b2c1adb4c84582ecc5ebf6e7, type: 2}
+  cadence: 0.5
+  selector: 1
 --- !u!1001 &1946846966735663833
 PrefabInstance:
   m_ObjectHideFlags: 0

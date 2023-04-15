@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1202074573871262332}
   - component: {fileID: -801725491809096742}
   - component: {fileID: -6509095851720871932}
+  - component: {fileID: 7744709657775241054}
   m_Layer: 0
   m_Name: Pistol9_prefab
   m_TagString: Untagged
@@ -102,6 +103,26 @@ MonoBehaviour:
   syncInterval: 0.1
   item: {fileID: 11400000, guid: 640cd8952b891064491c8289dbde191c, type: 2}
   amount: 0
+--- !u!114 &7744709657775241054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448113354875201996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758a0982707c2dd4a928935a03d11b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  MagSize: 10
+  ammoInMag: 0
+  ammo: {fileID: 11400000, guid: aa26e190e4d81be41ba13822ad7160da, type: 2}
+  cadence: 0.5
+  selector: 0
 --- !u!1001 &81058285213367124
 PrefabInstance:
   m_ObjectHideFlags: 0

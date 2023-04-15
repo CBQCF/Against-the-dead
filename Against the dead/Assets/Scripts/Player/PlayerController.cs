@@ -14,6 +14,7 @@ public class PlayerController : NetworkBehaviour
     private Vector3 _moveD = Vector3.zero;
     
     private CharacterController _characterController;
+    private Player _player;
     private Camera _cam;
 
     public bool inInterface;
@@ -65,6 +66,7 @@ public class PlayerController : NetworkBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         _characterController = GetComponent<CharacterController>();
+        _player = GetComponent<Player>();
         _cam = Camera.main;
     }
 
@@ -75,5 +77,56 @@ public class PlayerController : NetworkBehaviour
             HandleRotation();   
         }
         HandleMovement();
+        
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            _player.inventoryManager.SwitchInventory();
+        }
+
+        if (Input.inputString != null)
+        {
+            bool isNumber = int.TryParse(Input.inputString, out int number);
+            if (isNumber && number > 0 && number < 9)
+            {
+                _player.inventoryManager.ChangeSelectedSlot(number - 1);
+            }
+        }
+        
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        {
+            if (_player.inventoryManager.selectedSlot == 7)
+                _player.inventoryManager.ChangeSelectedSlot(0);
+            else
+                _player.inventoryManager.ChangeSelectedSlot(_player.inventoryManager.selectedSlot+1);
+        }
+        if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+        {
+            if (_player.inventoryManager.selectedSlot == 0)
+                _player.inventoryManager.ChangeSelectedSlot(7);
+            else
+                _player.inventoryManager.ChangeSelectedSlot(_player.inventoryManager.selectedSlot-1);
+        }
+
+        RaycastHit lookat;
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out lookat, _player.inventoryManager.pickupRange))
+        {
+            ItemData item = lookat.transform.gameObject.GetComponent<ItemData>();
+            if (item is not null)
+            {
+                _player.inventoryManager.interactionText.gameObject.SetActive(true);
+                _player.inventoryManager.interactionText.text = item.ToString();
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    _player.inventoryManager.PickupItem(item);
+                }
+            }
+            else
+            {
+                _player.inventoryManager.interactionText.gameObject.SetActive(false);
+            }
+        }
+        
+        _player.inventoryManager.WeaponInHands();
+        
     }
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8429407276581292020}
   - component: {fileID: 3492947461249110588}
   - component: {fileID: 2734598646498874266}
+  - component: {fileID: 5353545102163772353}
   m_Layer: 0
   m_Name: ClusterShotgun_prefab
   m_TagString: Untagged
@@ -97,8 +98,28 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  item: {fileID: 11400000, guid: 68042fd47d38a6f41a460d1ebe4ccafa, type: 2}
+  item: {fileID: 11400000, guid: c5f6dcc25fd8e2a4d9fba4b43552ed52, type: 2}
   amount: 0
+--- !u!114 &5353545102163772353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4581449515556804854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758a0982707c2dd4a928935a03d11b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  MagSize: 12
+  ammoInMag: 0
+  ammo: {fileID: 11400000, guid: 86bab569189bd6346a4b482fd0abba4e, type: 2}
+  cadence: 1
+  selector: 0
 --- !u!1001 &2586424807522045070
 PrefabInstance:
   m_ObjectHideFlags: 0

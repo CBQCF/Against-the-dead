@@ -15511,6 +15511,7 @@ MonoBehaviour:
   mainInventory: {fileID: 773412016}
   interactionText: {fileID: 2043050549}
   player: {fileID: 0}
+  pickupRange: 3
 --- !u!114 &1524109367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19508,9 +19509,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryManager: {fileID: 1524109366}
   itemsToPickup:
-  - {fileID: 11400000, guid: 6a3372ca4a279da478e5899d0d55f391, type: 2}
-  - {fileID: 11400000, guid: fded0d489e3acaa448d313525b76e167, type: 2}
+  - {fileID: 11400000, guid: 3ebff6a8a967737498e78ed09cb0f29d, type: 2}
   - {fileID: 11400000, guid: 640cd8952b891064491c8289dbde191c, type: 2}
+  - {fileID: 11400000, guid: fded0d489e3acaa448d313525b76e167, type: 2}
   - {fileID: 11400000, guid: 45306f7269e655849b85ad76e86dc630, type: 2}
 --- !u!114 &1955380780
 MonoBehaviour:

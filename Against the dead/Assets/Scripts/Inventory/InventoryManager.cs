@@ -12,18 +12,16 @@ public class InventoryManager : MonoBehaviour
     public TextMeshProUGUI interactionText;
     [HideInInspector] public Player player;
 
-
-    private Camera mainCamera;
-    private int pickupRange = 3;
-    private int selectedSlot;
+    public Item inHands { get; private set; }
+    public int pickupRange = 3;
+    [HideInInspector] public int selectedSlot { get; private set; }
 
     private void Start()
     {
         inventorySlots[selectedSlot].Select();
-        mainCamera = Camera.main;
     }
 
-    private void ChangeSelectedSlot(int newSelSlot)
+    public void ChangeSelectedSlot(int newSelSlot)
     {
         inventorySlots[selectedSlot].Deselect();
 
@@ -31,56 +29,34 @@ public class InventoryManager : MonoBehaviour
         selectedSlot = newSelSlot;
     }
 
-    void Update()
+    public void WeaponInHands()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        inHands = GetSelectedItem(false);
+        if (inHands is not null)
         {
-            SwitchInventory();
-        }
-
-        if (Input.inputString != null)
-        {
-            bool isNumber = int.TryParse(Input.inputString, out int number);
-            if (isNumber && number > 0 && number < 9)
+            if (inHands.type == Item.ItemType.Weapon)
             {
-                ChangeSelectedSlot(number - 1);
+                player.playerWeapon.ChangeVisible(inHands.prefab);
+                player.playerShoot.damage = inHands.prefab.GetComponent<WeaponData>().ammo.Damage;
+                player.playerShoot.range = inHands.prefab.GetComponent<WeaponData>().ammo.AmmoRange;
+                return;
             }
         }
 
-        RaycastHit lookat;
-        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out lookat, pickupRange))
-        {
-            ItemData item = lookat.transform.gameObject.GetComponent<ItemData>();
-            if (item is not null)
-            {
-                interactionText.gameObject.SetActive(true);
-                interactionText.text = item.ToString();
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    PickupItem(item);
-                }
-            }
-            else
-            {
-                interactionText.gameObject.SetActive(false);
-            }
-        }
+        player.playerWeapon.HideWeapon();
+        player.playerShoot.damage = 10;
+        player.playerShoot.range = 1;
     }
-    
+
     public void PickupItem(ItemData itemData)
     {
         if (AddItem(itemData.item))
         {
-            player.DestroyItem(itemData.gameObject.GetComponent<NetworkIdentity>().netId);
-        }
-        else
-        {
-            
+            player.Destroy(itemData.gameObject.GetComponent<NetworkIdentity>().netId);
         }
     }
-    
-    
-    
+
+
     public void SwitchInventory()
     {
         mainInventory.SetActive(!mainInventory.activeInHierarchy);

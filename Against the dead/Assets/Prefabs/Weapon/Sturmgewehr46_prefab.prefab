@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5715217274739465398}
   - component: {fileID: 5556532015648429765}
   - component: {fileID: 3735026864228202465}
+  - component: {fileID: -198240914418859879}
   m_Layer: 0
   m_Name: Sturmgewehr46_prefab
   m_TagString: Untagged
@@ -100,8 +101,28 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  item: {fileID: 11400000, guid: 6a3372ca4a279da478e5899d0d55f391, type: 2}
+  item: {fileID: 11400000, guid: 1c707e4af329cf54a9a47f2355f4b2cf, type: 2}
   amount: 0
+--- !u!114 &-198240914418859879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289003456829574244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758a0982707c2dd4a928935a03d11b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  MagSize: 35
+  ammoInMag: 0
+  ammo: {fileID: 11400000, guid: 45306f7269e655849b85ad76e86dc630, type: 2}
+  cadence: 0.5
+  selector: 1
 --- !u!1001 &289003455535196779
 PrefabInstance:
   m_ObjectHideFlags: 0

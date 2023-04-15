@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4800818477589594220}
   - component: {fileID: -2877985773106844579}
   - component: {fileID: 1309357029034685515}
+  - component: {fileID: 7891895505239219228}
   m_Layer: 0
   m_Name: fireaxe_prefab
   m_TagString: Untagged
@@ -99,6 +100,26 @@ MonoBehaviour:
   syncInterval: 0.1
   item: {fileID: 11400000, guid: fded0d489e3acaa448d313525b76e167, type: 2}
   amount: 0
+--- !u!114 &7891895505239219228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7485939422097835960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758a0982707c2dd4a928935a03d11b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  MagSize: 0
+  ammoInMag: 0
+  ammo: {fileID: 11400000, guid: d843b27f7acddb54a887b0bfb64cf360, type: 2}
+  cadence: 1.5
+  selector: 0
 --- !u!1001 &8015148105151305181
 PrefabInstance:
   m_ObjectHideFlags: 0
