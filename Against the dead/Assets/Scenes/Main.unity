@@ -10624,7 +10624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Port: 7777
+  Port: 7778
   DualMode: 1
   NoDelay: 1
   Interval: 10
@@ -16597,6 +16597,7 @@ GameObject:
   - component: {fileID: 1679869951}
   - component: {fileID: 1679869949}
   - component: {fileID: 1679869950}
+  - component: {fileID: 1679869952}
   m_Layer: 0
   m_Name: ZombieSpawn
   m_TagString: Untagged
@@ -16628,7 +16629,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679869948}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a91e4db98992f04e909e304f621dde4, type: 3}
   m_Name: 
@@ -16655,6 +16656,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1679869952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679869948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 363a98f81aeb14035bf7956687e93b9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  Zombie_normal: {fileID: 20140543043960277, guid: 3dd0f3843c7a53e4cacbf481922c52ab, type: 3}
+  Zombie_crawler: {fileID: 1613103028034031863, guid: 1156d38eb477a09448d206a2845aa0b6, type: 3}
+  zoneSize: {x: 500, y: 10, z: 500}
+  serverInfo: {fileID: 1501946529}
+  zombieGroupSize: 8
+  groupSpawnDelay: 20
+  maxHorde: 10
 --- !u!1001 &1681207189
 PrefabInstance:
   m_ObjectHideFlags: 0
