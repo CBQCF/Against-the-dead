@@ -19,7 +19,7 @@ public class Player : NetworkBehaviour
     public InventoryManager inventoryManager;
     public Stats stats;
     public PlayerWeapon playerWeapon;
-    
+    public PauseMenu pauseMenu;
     
     // Overrides
     public override void OnStartLocalPlayer()
@@ -36,13 +36,16 @@ public class Player : NetworkBehaviour
         playerController = this.AddComponent<PlayerController>();
         playerShoot = this.AddComponent<PlayerShoot>();
         stats = this.AddComponent<Stats>();
-        
+        pauseMenu = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
+
         stats.healthBar = GameObject.FindWithTag("Main UI").transform.GetChild(2).GetComponent<HealthBar>();
         stats.healthBar.SetMaxHealth(stats.health);
         
         playerWeapon.SyncWeapon();
         
         inventoryManager.player = this;
+
+        pauseMenu.player = this;
     }
     
     
