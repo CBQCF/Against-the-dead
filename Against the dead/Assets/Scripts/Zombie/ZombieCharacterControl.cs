@@ -57,6 +57,10 @@ public class ZombieCharacterControl : NetworkBehaviour
             if (distanceToPlayer <= mAttackDistance)
             {
                 mAnimator.SetBool("should_attack", true);
+                // faire perdre de la vie au joueur
+                //appeler AddHealth dans le script Stats pour lui faire perdre la vie
+                //ajouter dans addHealth une condition pour savoir si c'est un joueur ou pas (regarder le tag) 
+                //si c'est un joueur afficher un gameOver
                 _mControlMode = ControlMode.Tank;
             }
 
