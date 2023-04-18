@@ -20,6 +20,7 @@ public class Player : NetworkBehaviour
     public Stats stats;
     public PlayerWeapon playerWeapon;
     public PauseMenu pauseMenu;
+    public MiniMapScript miniMap;
     
     // Overrides
     public override void OnStartLocalPlayer()
@@ -37,6 +38,7 @@ public class Player : NetworkBehaviour
         playerShoot = this.AddComponent<PlayerShoot>();
         stats = this.AddComponent<Stats>();
         pauseMenu = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
+        miniMap = GameObject.Find("MiniMapCamera").GetComponent<MiniMapScript>();
 
         stats.healthBar = GameObject.FindWithTag("Main UI").transform.GetChild(2).GetComponent<HealthBar>();
         stats.healthBar.SetMaxHealth(stats.health);
@@ -44,8 +46,8 @@ public class Player : NetworkBehaviour
         playerWeapon.SyncWeapon();
         
         inventoryManager.player = this;
-
         pauseMenu.player = this;
+        miniMap.player = this.transform;
     }
     
     
