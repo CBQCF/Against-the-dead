@@ -37,7 +37,7 @@ public class PlayerShoot : NetworkBehaviour
             Stats target = hit.transform.GetComponent<Stats>();
             if (target is not null)
             {
-                target.AddHealth(-damage);
+                target.AddHealth(damage);
             }
         }
     }

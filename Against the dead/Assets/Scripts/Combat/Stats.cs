@@ -19,11 +19,18 @@ public class Stats : NetworkBehaviour
     
     public void AddHealth(int damage)
     {
-        health += damage;
+        health -= damage;
         if (healthBar is not null) healthBar.SetHealth(health);
-        if (health <= 0)
+        if (health <= 0 && gameObject.CompareTag("Player"))
         {
-            NetworkServer.Destroy(this.gameObject);
+            // il faudra load la scène de fin et demander si le joueur veut jouer à nouveau ou pas
+        }
+        else
+        {
+            if (health <= 0)
+            {
+                NetworkServer.Destroy(this.gameObject);
+            }
         }
     }
 }
