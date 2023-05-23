@@ -1,5 +1,7 @@
 using System;
+using UnityEngine;
 using Mirror;
+using UnityEngine.SceneManagement;
 
 public class Stats : NetworkBehaviour
 {
@@ -13,7 +15,18 @@ public class Stats : NetworkBehaviour
         if (healthBar is not null) healthBar.SetHealth(newValue);
         if (newValue <= 0)
         {
-            NetworkServer.Destroy(this.gameObject);
+            if (gameObject.CompareTag("Player"))
+            {
+                // Charger la scène GameOver
+                SceneManager.LoadScene("GameOver");
+                Cursor.lockState = CursorLockMode.None;
+                NetworkManager.singleton.StopClient();
+                NetworkServer.Destroy(this.gameObject);
+            }
+            else
+            {
+                NetworkServer.Destroy(this.gameObject);
+            }
         }
     }
     
@@ -21,13 +34,17 @@ public class Stats : NetworkBehaviour
     {
         health -= damage;
         if (healthBar is not null) healthBar.SetHealth(health);
-        if (health <= 0 && gameObject.CompareTag("Player"))
+        if (health <= 0)
         {
-            // il faudra load la scène de fin et demander si le joueur veut jouer à nouveau ou pas
-        }
-        else
-        {
-            if (health <= 0)
+            if (gameObject.CompareTag("Player"))
+            {
+                // Charger la scène GameOver
+                SceneManager.LoadScene("GameOver");
+                Cursor.lockState = CursorLockMode.None;
+                NetworkManager.singleton.StopClient();
+                NetworkServer.Destroy(this.gameObject);
+            }
+            else
             {
                 NetworkServer.Destroy(this.gameObject);
             }
