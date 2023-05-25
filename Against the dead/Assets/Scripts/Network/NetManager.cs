@@ -52,6 +52,8 @@ public class NetManager : NetworkManager
         {
             StopServer();
         }
+        
+        Debug.Log(InventoryManager.Instance.SaveInventory());
     }
     
 }

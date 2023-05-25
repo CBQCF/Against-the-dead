@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -16,9 +17,26 @@ public class InventoryManager : MonoBehaviour
     public int pickupRange = 3;
     [HideInInspector] public int selectedSlot { get; private set; }
 
+    public static InventoryManager Instance
+    {
+        get
+        {
+            if (instance != null)
+            {
+                return instance;
+            }
+
+            instance = FindObjectOfType<InventoryManager>();
+            return instance;
+        }
+    }
+
+    private static InventoryManager instance;
+    
     private void Start()
     {
         inventorySlots[selectedSlot].Select();
+        instance = this;
     }
 
     public void ChangeSelectedSlot(int newSelSlot)
@@ -137,5 +155,27 @@ public class InventoryManager : MonoBehaviour
         Vector3 spawnPos = player.transform.position + player.transform.forward * 2;
         player.CmdSpawnItem(NetworkManager.singleton.spawnPrefabs.IndexOf(item.item.prefab), item.amount, spawnPos);
         Destroy(item.gameObject);
+    }
+
+    public string SaveInventory()
+    {
+        List<ItemSerialize> items = new List<ItemSerialize>();
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            InventoryItem itemInSlot = inventorySlots[i].GetComponentInChildren<InventoryItem>();
+            if (itemInSlot is not null)
+            {
+                ItemSerialize ser = new ItemSerialize();
+                ser.amount = itemInSlot.amount;
+                ser.name = itemInSlot.item.name;
+                
+                items.Add(ser);
+            }
+        }
+
+        ListWrapper listWrapper = new ListWrapper();
+        listWrapper.list = items;
+        
+        return JsonUtility.ToJson(listWrapper);
     }
 }

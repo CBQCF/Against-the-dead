@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Scriptable object/Item")]
+[Serializable]
 public class Item : ScriptableObject
 {
     [Header("Gameplay only")] 

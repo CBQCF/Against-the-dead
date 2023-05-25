@@ -22,7 +22,7 @@ public class ConnectionHandler : MonoBehaviour
     private Auth _authenticator;
 
 
-    private readonly ushort _defaultPort = 48652;
+    private readonly ushort _defaultPort = 52345;
 
     private void Awake()
     {
@@ -56,7 +56,7 @@ public class ConnectionHandler : MonoBehaviour
             _manager.networkAddress = serverIP.text;
 
             ushort port;
-            if (ushort.TryParse(serverPort.text, out port))
+            if (ushort.TryParse(serverPort.text, out port) && port > 0 && port < 65535)
             {
                 _transport.Port = port;
             }
@@ -79,10 +79,15 @@ public class ConnectionHandler : MonoBehaviour
     {
         if (checkUser() && !NetworkClient.isConnected)
         {
-            
-            ushort port = _defaultPort;
-            ushort.TryParse(serverPort.text, out port);
-            _transport.Port = port;
+            ushort port;
+            if (ushort.TryParse(serverPort.text, out port) && port > 0 && port < 65535)
+            {
+                _transport.Port = port;
+            }
+            else
+            {
+                _transport.Port = _defaultPort;
+            }
             
             _authenticator.serverPassword = serverPassword.text;
             _authenticator.password = userPassword.text;
