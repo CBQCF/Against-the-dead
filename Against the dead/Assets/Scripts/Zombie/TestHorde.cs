@@ -5,29 +5,11 @@ using Random = UnityEngine.Random;
 
 public class TestHorde : NetworkBehaviour
 {
-    [SerializeField] private GameObject Zombie_normal;
-
-    [SerializeField] private GameObject Zombie_crawler;
+    [SerializeField] private GameObject hordePrefab;
 
     [SerializeField] private Vector3 zoneSize;
 
-    private float spawnTimer = 0f;
-    private int spawnCount = 10;
-    private int compteur = 0;
-
     public ServerInfo serverInfo;
-
-    [SerializeField] public int zombieGroupSize;
-    [SerializeField] public float groupSpawnDelay;
-    private float groupSpawnTimer = 0f;
-    public int maxHorde;
-    private int nbHorde = 0;
-
-
-    /// <summary>
-    /// Get a random Vector3 position in the ZombieSpawn zone
-    /// </summary>
-    /// <returns></returns>
     private Vector3 randomSpawn()
     {
         return new Vector3(
@@ -37,69 +19,28 @@ public class TestHorde : NetworkBehaviour
         );
     }
 
-    /// <summary>
-    /// Spawn multiple zombies
-    /// </summary>
-    void SpawnZombies()
+    [Server]
+    void Start()
     {
-        if (nbHorde < maxHorde)
+        serverInfo = FindObjectOfType<ServerInfo>();
+        for (int i = 0; i < 10; i++)
         {
-            spawnTimer += Time.deltaTime;
-            groupSpawnTimer += Time.deltaTime;
-            if (groupSpawnTimer >= groupSpawnDelay)
-            {
-                groupSpawnTimer = 0f;
-
-                // Spawn the zombie group
-                Vector3 coord = randomSpawn();
-                GameObject boss = Instantiate(Zombie_crawler, coord, Quaternion.identity);
-        
-                ZombieCharacterControl zccc = boss.AddComponent<ZombieCharacterControl>();
-                zccc.serverInfo = serverInfo;
-
-                NetworkServer.Spawn(boss);
-                for (int i = 1; i < zombieGroupSize - 1; i++)
-                {
-                    GameObject zomb = Instantiate(Zombie_normal, coord, Quaternion.identity);
-        
-                    ZombieCharacterControl zcc = zomb.AddComponent<ZombieCharacterControl>();
-                    zcc.serverInfo = serverInfo;
-
-                    NetworkServer.Spawn(zomb);
-                }
-
-                nbHorde += 1;
-            }
-            else if (spawnTimer >= 10f)
-            {
-                spawnTimer = 0f;
-
-                // Spawn normal zombies
-                Vector3 coord = randomSpawn();
-                for (int i = 1; i < spawnCount; i++)
-                {
-                    GameObject zomb = Instantiate(Zombie_normal, coord, Quaternion.identity);
-        
-                    ZombieCharacterControl zcc = zomb.AddComponent<ZombieCharacterControl>();
-                    zcc.serverInfo = serverInfo;
-
-                    NetworkServer.Spawn(zomb);
-                }
-
-                nbHorde += 1;
-            }  
+            SpawnHorde();
         }
     }
-    [Server]
-    void Update()
-    {
-        if (serverInfo is null) serverInfo = NetManager.Instance.GetComponentInChildren<ServerInfo>();
-        SpawnZombies();
-    }
-    
+
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, zoneSize);
+    }
+
+    public void SpawnHorde()
+    {
+        var position = randomSpawn();
+        GameObject horde = Instantiate(hordePrefab, position, Quaternion.identity);
+        horde.GetComponent<horde>().spawner = this;
+        NetworkServer.Spawn(horde);
     }
 }
