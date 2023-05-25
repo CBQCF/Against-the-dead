@@ -14,8 +14,6 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
 
-    public Camera camera;
-    
     public PlayerController playerController;
     public PlayerShoot playerShoot;
     public InventoryManager inventoryManager;

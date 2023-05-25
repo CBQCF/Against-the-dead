@@ -69,21 +69,18 @@ public class Auth : NetworkAuthenticator
         {
             if (SqLiteHandler.Instance.GetUser(msg.userName).Read()) // User already exists
             {
-
-                if (SqLiteHandler.Instance.CheckPassword(msg.userName, msg.userPassword))
-
-                    valid = true;
-                
-                else valid = false;
+                valid = SqLiteHandler.Instance.CheckPassword(msg.userName, msg.userPassword); // Check password
             }
             else
             {
-                
-                SqLiteHandler.Instance.RegisterUser(msg.userName, msg.userPassword);
+                SqLiteHandler.Instance.RegisterUser(msg.userName, msg.userPassword); // Register new user
                 valid = true;
             }
         }
-        else valid = false;
+        else
+        {
+            valid = false;
+        }
 
         if (valid)
         {
