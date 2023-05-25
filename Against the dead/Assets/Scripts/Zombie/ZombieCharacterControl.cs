@@ -28,36 +28,12 @@ public class ZombieCharacterControl : NetworkBehaviour
     private float _mCurrentH;
     private readonly float _mInterpolation = 10;
     private Vector3 _mCurrentDirection = Vector3.zero;
-    
     public ServerInfo serverInfo;
-    
-    public Player player;
 
     private void Awake()
     {
         mAnimator = GetComponent<Animator>();
-        player = FindClosestPlayer();
     }
-    
-    private Player FindClosestPlayer()
-    {
-        Player[] players = FindObjectsOfType<Player>(); 
-        Player closestPlayer = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (Player p in players)
-        {
-            float distance = Vector3.Distance(transform.position, p.transform.position);
-            if (distance < closestDistance)
-            {
-                closestPlayer = p;
-                closestDistance = distance;
-            }
-        }
-
-        return closestPlayer;
-    }
-    
     
     private void FixedUpdate()
     {

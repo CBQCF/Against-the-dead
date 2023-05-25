@@ -93,16 +93,10 @@ public class TestHorde : NetworkBehaviour
     [Server]
     void Update()
     {
+        if (serverInfo is null) serverInfo = NetManager.Instance.GetComponentInChildren<ServerInfo>();
         SpawnZombies();
     }
-
-    [Server]
-    void Start()
-    {
-        serverInfo = FindObjectOfType<ServerInfo>();
-    }
-
-
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
