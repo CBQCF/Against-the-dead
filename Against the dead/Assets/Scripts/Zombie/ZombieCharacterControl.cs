@@ -97,7 +97,6 @@ public class ZombieCharacterControl : NetworkBehaviour
         foreach (GameObject player in mPlayers)
         {
             player.GetComponent<Player>().CmdInflictDamage(10);
-            Debug.Log("Le zombie attaque");
         }
     }
 
