@@ -43,7 +43,9 @@ public class Player : NetworkBehaviour
         miniMap = GameObject.Find("MiniMapCamera").GetComponent<MiniMapScript>();
 
         stats.healthBar = GameObject.FindWithTag("Main UI").transform.GetChild(2).GetComponent<HealthBar>();
+        stats.health = 100;
         stats.healthBar.SetMaxHealth(stats.health);
+        stats.healthBar.SetHealth(stats.health);
         
         playerWeapon.SyncWeapon();
         
@@ -94,5 +96,16 @@ public class Player : NetworkBehaviour
         GameObject item = Instantiate(NetworkManager.singleton.spawnPrefabs[inHands], transform);
         NetworkServer.Spawn(item, new LocalConnectionToClient());
     }
-
+    
+    [Command]
+    public void CmdInflictDamage(int damage)
+    {
+        Stats stats = GetComponent<Stats>();
+        HealthBar healthBar = GetComponent<HealthBar>();
+        if (stats != null)
+        {
+            stats.AddHealth(damage);
+            Debug.Log("le joueur à du perdre de la vie");
+        }
+    }
 }

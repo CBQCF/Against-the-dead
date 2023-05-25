@@ -11,6 +11,11 @@ public class ZombieCharacterControl : NetworkBehaviour
         Direct
     }
 
+    public float attackDelay = 1.0f; // Délai avant la première attaque
+    public float attackInterval = 2.0f; // Intervalle entre les attaques successives
+
+    private bool isAttacking = false;
+    private float timeSinceLastAttack = 0f;
     public float mMoveSpeed = 2;
     public float mTurnSpeed = 200;
     public float mDetectionDistance = 10;
@@ -23,19 +28,41 @@ public class ZombieCharacterControl : NetworkBehaviour
     private float _mCurrentH;
     private readonly float _mInterpolation = 10;
     private Vector3 _mCurrentDirection = Vector3.zero;
-
+    
     public ServerInfo serverInfo;
+    
+    public Player player;
 
     private void Awake()
     {
         mAnimator = GetComponent<Animator>();
+        player = FindClosestPlayer();
+    }
+    
+    private Player FindClosestPlayer()
+    {
+        Player[] players = FindObjectsOfType<Player>(); 
+        Player closestPlayer = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Player p in players)
+        {
+            float distance = Vector3.Distance(transform.position, p.transform.position);
+            if (distance < closestDistance)
+            {
+                closestPlayer = p;
+                closestDistance = distance;
+            }
+        }
+
+        return closestPlayer;
     }
     
     
     private void FixedUpdate()
     {
         GameObject[] mPlayers = serverInfo.playerList;
-        
+
         foreach (GameObject player in mPlayers)
         {
             Vector3 playerDirection = player.transform.position - transform.position;
@@ -54,15 +81,23 @@ public class ZombieCharacterControl : NetworkBehaviour
                 _mControlMode = ControlMode.Direct;
             }
 
-            // Attack player when in range
             if (distanceToPlayer <= mAttackDistance)
             {
-                mAnimator.SetBool("should_attack", true);
-                // faire perdre de la vie au joueur
-                //appeler AddHealth dans le script Stats pour lui faire perdre la vie
-                //ajouter dans addHealth une condition pour savoir si c'est un joueur ou pas (regarder le tag) 
-                //si c'est un joueur afficher un gameOver
-                _mControlMode = ControlMode.Tank;
+                if (!isAttacking)
+                {
+                    isAttacking = true;
+                    mAnimator.SetBool("should_attack", true);
+                    InvokeRepeating(nameof(PerformAttack), attackDelay, attackInterval);
+                }
+            }
+            else
+            {
+                if (isAttacking)
+                {
+                    isAttacking = false;
+                    mAnimator.SetBool("should_attack", false);
+                    CancelInvoke(nameof(PerformAttack));
+                }
             }
 
             switch (_mControlMode)
@@ -74,6 +109,23 @@ public class ZombieCharacterControl : NetworkBehaviour
                 case ControlMode.Tank:
                     TankUpdate();
                     break;
+            }
+        }
+    }
+
+    private void PerformAttack()
+    {
+        GameObject[] mPlayers = serverInfo.playerList;
+
+        foreach (GameObject player in mPlayers)
+        {
+            Vector3 playerDirection = player.transform.position - transform.position;
+            float distanceToPlayer = playerDirection.magnitude;
+
+            if (distanceToPlayer <= mAttackDistance)
+            {
+                player.GetComponent<Player>().CmdInflictDamage(10);
+                Debug.Log("le zombie attaque");
             }
         }
     }
