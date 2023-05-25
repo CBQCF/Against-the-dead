@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -49,14 +50,21 @@ public class PauseMenu : MonoBehaviour
         player.playerController.inInterface = true;
     }
 
+    public void Disconnect()
+    {
+        pauseMenuUI.SetActive(false);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu")); 
+        NetManager.Instance.StopClient();
+    }
+
     public void LoadOptions()
     {
-        SceneManager.LoadScene("Menu");
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
     }
 
     public void LoadDidacticiel()
     {
-        SceneManager.LoadScene("Menu/Didacticiel");
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu/Didacticiel"));
     }
 
     public void QuitGame()

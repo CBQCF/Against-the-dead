@@ -51,7 +51,7 @@ public class ConnectionHandler : MonoBehaviour
     
     public void Connect()
     {
-        if (checkUser())
+        if (checkUser() && !NetworkClient.isConnected)
         {
             _manager.networkAddress = serverIP.text;
 
@@ -77,7 +77,7 @@ public class ConnectionHandler : MonoBehaviour
 
     public void Host()
     {
-        if (checkUser())
+        if (checkUser() && !NetworkClient.isConnected)
         {
             _manager.networkAddress = "localhost";
             
@@ -99,7 +99,7 @@ public class ConnectionHandler : MonoBehaviour
     {
         if (NetworkClient.isConnected && NetworkClient.connection.isAuthenticated)
         {
-            SceneManager.SetActiveScene(SceneManager.GetSceneAt(1));
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName("Main"));
             if (!NetworkClient.ready)
             {
                 NetworkClient.Ready();
@@ -111,7 +111,7 @@ public class ConnectionHandler : MonoBehaviour
         }
         else
         {
-            SceneManager.SetActiveScene(SceneManager.GetSceneAt(0));
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
         }
     }
 }
