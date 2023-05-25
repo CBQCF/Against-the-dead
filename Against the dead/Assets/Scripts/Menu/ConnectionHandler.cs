@@ -79,7 +79,6 @@ public class ConnectionHandler : MonoBehaviour
     {
         if (checkUser() && !NetworkClient.isConnected)
         {
-            _manager.networkAddress = "localhost";
             
             ushort port = _defaultPort;
             ushort.TryParse(serverPort.text, out port);

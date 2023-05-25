@@ -35,7 +35,7 @@ public class ZombieCharacterControl : NetworkBehaviour
         mAnimator = GetComponent<Animator>();
     }
     
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         GameObject[] mPlayers = serverInfo.playerList;
 

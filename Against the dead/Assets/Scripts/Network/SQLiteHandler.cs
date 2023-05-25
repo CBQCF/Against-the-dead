@@ -68,7 +68,7 @@ public class SqLiteHandler
             return reader;
         }
         
-        public IDataReader RegisterUser(string username, string password)
+        public void RegisterUser(string username, string password)
         {
             password = GetHash(password);
             IDbCommand dbcmd = _dbConnection.CreateCommand();
@@ -85,8 +85,7 @@ public class SqLiteHandler
                 "\"crawler\" : 0," +
                 "\"normal\" : 0," +
                 "}')";
-            IDataReader reader = dbcmd.ExecuteReader();
-            return reader;
+            dbcmd.ExecuteNonQuery();
         }
 
         private int GenerateId()
@@ -107,8 +106,12 @@ public class SqLiteHandler
             dbcmd.CommandText =
                 $"SELECT password FROM users where username = '{username}'";
             IDataReader reader = dbcmd.ExecuteReader();
-            reader.Read();
-            return (string)reader["password"] == password;
+            if (reader.Read())
+            {
+                return (string)reader["password"] == password;
+            }
+
+            return false;
         }
 
         public static string GetHash(string rawData)

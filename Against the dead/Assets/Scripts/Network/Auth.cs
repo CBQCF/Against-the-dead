@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using Mirror;
 using UnityEngine;
 
@@ -66,8 +67,9 @@ public class Auth : NetworkAuthenticator
         AuthResponseMessage authResponseMessage;
         if (serverPassword == msg.serverPassword)
         {
-            if (SqLiteHandler.Instance.GetUser(username).Read()) // User already exists
+            if (SqLiteHandler.Instance.GetUser(msg.userName).Read()) // User already exists
             {
+
                 if (SqLiteHandler.Instance.CheckPassword(msg.userName, msg.userPassword))
 
                     valid = true;
