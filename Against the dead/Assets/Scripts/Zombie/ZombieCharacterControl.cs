@@ -30,7 +30,8 @@ public class ZombieCharacterControl : NetworkBehaviour
     {
         mAnimator = GetComponent<Animator>();
     }
-
+    
+    
     private void FixedUpdate()
     {
         GameObject[] mPlayers = serverInfo.playerList;

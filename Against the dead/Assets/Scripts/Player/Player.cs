@@ -1,6 +1,8 @@
 using System;
+using kcp2k;
 using UnityEngine;
 using Mirror;
+using Mirror.Authenticators;
 using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
@@ -29,7 +31,7 @@ public class Player : NetworkBehaviour
         Camera.main.transform.SetParent(transform); 
         Camera.main.transform.localPosition = new Vector3(0, 0, 0);
         
-        string playername = "User" + Random.Range(100, 999);
+        string playername = NetManager.singleton.GetComponent<Auth>().username;
         SetupPlayer(playername);
 
 
@@ -47,7 +49,6 @@ public class Player : NetworkBehaviour
         
         inventoryManager.player = this;
         pauseMenu.player = this;
-        miniMap.player = this.transform;
     }
     
     

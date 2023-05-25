@@ -7,14 +7,19 @@ using UnityEngine;
 
 public class MiniMapScript : NetworkBehaviour
 {
-    public Transform player;
+    private Transform _transform;
+
+    private void Awake()
+    {
+        _transform = Camera.main.transform;
+    }
 
     private void LateUpdate()
     {
-        Vector3 newposition = player.position;
+        Vector3 newposition = _transform.position;
         newposition.y = transform.position.y;
         transform.position = newposition;
-        
-        transform.rotation = Quaternion.Euler(90f,player.eulerAngles.y,0f);
+
+        transform.rotation = Quaternion.Euler(90f, transform.eulerAngles.y, 0f);
     }
 }
