@@ -12,7 +12,7 @@ public class ZombieCharacterControl : NetworkBehaviour
     }
 
     public float attackDelay = 1.0f; // Délai avant la première attaque
-    public float attackInterval = 2.0f; // Intervalle entre les attaques successives
+    public float attackInterval = 1.5f; // Intervalle entre les attaques successives
 
     private bool isAttacking = false;
     private float timeSinceLastAttack = 0f;
@@ -39,8 +39,9 @@ public class ZombieCharacterControl : NetworkBehaviour
     {
         GameObject[] mPlayers = serverInfo.playerList;
 
-        foreach (GameObject player in mPlayers)
+        for(int i = 0; i < mPlayers.Length; i++)
         {
+            GameObject player = mPlayers[i];
             Vector3 playerDirection = player.transform.position - transform.position;
             float distanceToPlayer = playerDirection.magnitude;
 
@@ -95,14 +96,8 @@ public class ZombieCharacterControl : NetworkBehaviour
 
         foreach (GameObject player in mPlayers)
         {
-            Vector3 playerDirection = player.transform.position - transform.position;
-            float distanceToPlayer = playerDirection.magnitude;
-
-            if (distanceToPlayer <= mAttackDistance)
-            {
-                player.GetComponent<Player>().CmdInflictDamage(10);
-                Debug.Log("le zombie attaque");
-            }
+            player.GetComponent<Player>().CmdInflictDamage(10);
+            Debug.Log("Le zombie attaque");
         }
     }
 
