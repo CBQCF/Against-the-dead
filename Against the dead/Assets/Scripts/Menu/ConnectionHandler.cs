@@ -93,7 +93,7 @@ public class ConnectionHandler : MonoBehaviour
             _authenticator.password = userPassword.text;
             _authenticator.username = userName.text;
 
-            NotificationManager.Instance.SuccessNetwork($"Starting server on port :\n{port.ToString()}");
+            NotificationManager.Instance.SuccessNetwork($"Starting server on port :\n{_transport.Port.ToString()}");
 
             _manager.StartHost();
         }
