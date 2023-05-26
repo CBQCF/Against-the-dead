@@ -157,7 +157,7 @@ public class InventoryManager : MonoBehaviour
         Destroy(item.gameObject);
     }
 
-    public string SaveInventory()
+    public override string ToString()
     {
         List<ItemSerialize> items = new List<ItemSerialize>();
         for (int i = 0; i < inventorySlots.Length; i++)

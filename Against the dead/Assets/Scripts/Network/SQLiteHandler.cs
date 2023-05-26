@@ -50,7 +50,7 @@ public class SqLiteHandler
     {
         SQLiteCommand request = new SQLiteCommand(_dbConnection);
         
-        request.CommandText = $"SELECT * FROM users WHERE id = '@ID'";
+        request.CommandText = $"SELECT * FROM users WHERE username = @username";
         
         request.Parameters.Add("@username", DbType.String);
         request.Parameters["@username"].Value = username;
@@ -70,13 +70,31 @@ public class SqLiteHandler
         return request.ExecuteReader();
     }
 
+    public int UpdateUser(int id, string column, string inventory)
+    {
+        SQLiteCommand request = new SQLiteCommand(_dbConnection);
+        
+        request.CommandText = $"UPDATE users SET @column = @inventory WHERE id = @id";
+
+        request.Parameters.Add("@column", DbType.String);
+        request.Parameters["@column"].Value = column;
+        
+        request.Parameters.Add("@id", DbType.String);
+        request.Parameters["@id"].Value = id;
+
+        request.Parameters.Add("@inventory", DbType.String);
+        request.Parameters["@inventory"].Value = inventory;
+        
+        return request.ExecuteNonQuery();
+    }
+    
     public int RegisterUser(string username, string password)
     {
         password = GetHash(password);
             
         SQLiteCommand request = new SQLiteCommand(_dbConnection);
         
-        request.CommandText = $"INSERT INTO users VALUES({GenerateId()}, '@username', '@password', " + // player identifier
+        request.CommandText = $"INSERT INTO users VALUES(@id, @username, @password, " + // player identifier
                               "'{{\"list\" : []}}'," + // Inventory
                               "'{" + // Player stats
                               "\"health\" : 100," + 
@@ -85,6 +103,9 @@ public class SqLiteHandler
                               "\"crawler\" : 0," +
                               "\"normal\" : 0," +
                               "}')";
+        int id = GenerateId();
+        request.Parameters.Add("@id", DbType.Int32);
+        request.Parameters["@id"].Value = id;
         
         request.Parameters.Add("@username", DbType.String);
         request.Parameters["@username"].Value = username;
@@ -92,7 +113,8 @@ public class SqLiteHandler
         request.Parameters.Add("@password", DbType.String);
         request.Parameters["@password"].Value = password;
 
-        return request.ExecuteNonQuery();
+        request.ExecuteNonQuery();
+        return id;
     }
 
     private int GenerateId()
@@ -112,7 +134,7 @@ public class SqLiteHandler
 
         SQLiteCommand request = new SQLiteCommand(_dbConnection);
 
-        request.CommandText = $"SELECT password FROM users where username = '@username'";
+        request.CommandText = $"SELECT password FROM users where username = @username";
 
         request.Parameters.Add("@username", DbType.String);
         request.Parameters["@username"].Value = username;

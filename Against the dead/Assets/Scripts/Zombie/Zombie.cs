@@ -8,7 +8,7 @@ public class Zombie : NetworkBehaviour
 {
     public Transform position { get; set; }
 
-    public HealthBar healthBar;
+    public Bar healthBar;
 
     void Start()
     {

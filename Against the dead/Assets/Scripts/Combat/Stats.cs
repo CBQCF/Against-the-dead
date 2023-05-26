@@ -1,21 +1,29 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class Stats : NetworkBehaviour
 {
     [SyncVar(hook = nameof(OnDamageTaken))]
     public int health;
-
-    public HealthBar healthBar;
+    public int food;
+    public int playerKill;
+    public int normalKill; 
+    public int crawlerKill;
+    
+    
+    public Bar healthBar;
+    public Bar foodBar;
     
     public int GetPlayerCount()
     {
         if (NetworkServer.active)
         {
             // Si vous êtes l'hôte du serveur
-            return NetworkManager.singleton.numPlayers;
+            return NetManager.Instance.numPlayers;
         }
         else if (NetworkClient.isConnected)
         {
@@ -29,7 +37,7 @@ public class Stats : NetworkBehaviour
 
     private void OnDamageTaken(int oldValue, int newValue)
     {
-        if (healthBar is not null) healthBar.SetHealth(newValue);
+        if (healthBar is not null) healthBar.SetValue(newValue);
         if (newValue <= 0)
         {
             if (gameObject.CompareTag("Player"))
@@ -56,7 +64,7 @@ public class Stats : NetworkBehaviour
     public void AddHealth(int damage)
     {
         health -= damage;
-        if (healthBar is not null) healthBar.SetHealth(health);
+        if (healthBar is not null) healthBar.SetValue(health);
         if (health <= 0)
         {
             if (gameObject.CompareTag("Player"))
@@ -72,5 +80,22 @@ public class Stats : NetworkBehaviour
                 NetworkServer.Destroy(this.gameObject);
             }
         }
+    }
+
+    public override string ToString()
+    {
+        StatsWrapper stats = new StatsWrapper();
+        
+        stats.stats = new Dictionary<string, int>();
+        
+        stats.stats.Add("health", health);
+        stats.stats.Add("hunger", food);
+        
+        stats.stats.Add("player", playerKill);
+        stats.stats.Add("normal", normalKill);
+        stats.stats.Add("crawler", crawlerKill);
+
+        return JsonUtility.ToJson(stats);
+
     }
 }

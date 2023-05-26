@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using kcp2k;
 using UnityEngine;
 using Mirror;
@@ -40,14 +41,17 @@ public class Player : NetworkBehaviour
         pauseMenu = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
         miniMap = GameObject.Find("MiniMapCamera").GetComponent<MiniMapScript>();
 
-        stats.healthBar = GameObject.FindWithTag("Main UI").transform.GetChild(2).GetComponent<HealthBar>();
-        stats.health = 100;
-        stats.healthBar.SetMaxHealth(stats.health);
-        stats.healthBar.SetHealth(stats.health);
+        stats.healthBar = GameObject.FindWithTag("Main UI").transform.GetChild(2).GetComponent<Bar>();
+        stats.foodBar = GameObject.FindWithTag("Main UI").transform.GetChild(3).GetComponent<Bar>();
+        
+        
+        stats.health = 100;  //*
+        stats.healthBar.SetMax(stats.health);
+        stats.healthBar.SetValue(stats.health);
         
         playerWeapon.SyncWeapon();
         
-        inventoryManager.player = this;
+        inventoryManager.player = this; //*
         pauseMenu.player = this;
     }
     
@@ -99,11 +103,23 @@ public class Player : NetworkBehaviour
     public void CmdInflictDamage(int damage)
     {
         Stats stats = GetComponent<Stats>();
-        HealthBar healthBar = GetComponent<HealthBar>();
+        Bar healthBar = GetComponent<Bar>();
         if (stats != null)
         {
             stats.AddHealth(damage);
             Debug.Log("le joueur à du perdre de la vie");
         }
+    }
+    
+    [Command]
+    public void ExportInventory(int id, string data)
+    {
+        SqLiteHandler.Instance.UpdateUser(id,"inventory", data);
+    }
+    
+    [Command]
+    public void ExportStats(int id, string data)
+    {
+        SqLiteHandler.Instance.UpdateUser(id,"stats", data);
     }
 }

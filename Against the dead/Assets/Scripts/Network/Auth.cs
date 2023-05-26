@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 using Mirror;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ public class Auth : NetworkAuthenticator
     [Header("Client Credentials")]
     public string username;
     public string password;
+    
+    public int id { get; private set; }
 
     readonly HashSet<NetworkConnection> connectionsPendingDisconnect = new HashSet<NetworkConnection>();
     
@@ -33,6 +36,7 @@ public class Auth : NetworkAuthenticator
     public struct AuthResponseMessage : NetworkMessage
     {
         public byte code;
+        public int id;
         public string message;
     }
 
@@ -63,17 +67,22 @@ public class Auth : NetworkAuthenticator
     /// <param name="msg">The message payload</param>
     public void OnAuthRequestMessage(NetworkConnectionToClient conn, AuthRequestMessage msg)
     {
+        int id = -1;
         bool valid;
         AuthResponseMessage authResponseMessage;
         if (serverPassword == msg.serverPassword)
         {
-            if (SqLiteHandler.Instance.GetUser(msg.userName).Read()) // User already exists
+            SQLiteDataReader user = SqLiteHandler.Instance.GetUser(msg.userName);
+            if (user.Read()) // User already exists
             {
+                Debug.Log("Found");
+                id = (int)user["id"];
                 valid = SqLiteHandler.Instance.CheckPassword(msg.userName, msg.userPassword); // Check password
             }
             else
             {
-                SqLiteHandler.Instance.RegisterUser(msg.userName, msg.userPassword); // Register new user
+                Debug.Log("Not Found");
+                id = SqLiteHandler.Instance.RegisterUser(msg.userName, msg.userPassword); // Register new user
                 valid = true;
             }
         }
@@ -87,6 +96,7 @@ public class Auth : NetworkAuthenticator
             authResponseMessage = new AuthResponseMessage()
             {
                 code = 100,
+                id = id,
                 message = "Valid credentials"
             };
             conn.Send(authResponseMessage);
@@ -98,7 +108,8 @@ public class Auth : NetworkAuthenticator
             authResponseMessage = new AuthResponseMessage()
             {
                 code = 200,
-                message = "Incorrect Credentials"
+                id = -1,
+                message = "Incorrect credentials"
             };
             conn.Send(authResponseMessage);
             conn.isAuthenticated = false;
@@ -165,6 +176,7 @@ public class Auth : NetworkAuthenticator
     /// <param name="msg">The message payload</param>
     public void OnAuthResponseMessage(AuthResponseMessage msg)
     {
+        id = msg.id;
         // Authentication has been accepted
         if (msg.code == 100)
         {
