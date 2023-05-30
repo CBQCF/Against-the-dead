@@ -11,10 +11,8 @@ public class Player : NetworkBehaviour
 {
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
-
-    [SyncVar] public int id;
-
-    public readonly int invSize = 32;
+    [SyncVar]
+    public int id;
 
     public PlayerController playerController;
     public PlayerShoot playerShoot;
@@ -23,8 +21,9 @@ public class Player : NetworkBehaviour
     public PlayerWeapon playerWeapon;
     public PauseMenu pauseMenu;
     public MiniMapScript miniMap;
+    
+    public readonly int invSize = 32;
     public List<Item> inventory;
-
 
     // Overrides
     public override void OnStartLocalPlayer()
@@ -35,39 +34,45 @@ public class Player : NetworkBehaviour
         
         string playername = NetManager.Instance.GetComponent<Auth>().username;
         SetupPlayer(playername);
-        
-        SetupId(((Auth)NetManager.Instance.authenticator).id);
 
+        SetupID(((Auth)NetManager.Instance.authenticator).id);
+        inventory = new List<Item>();
+        
         UIReference uiReference = GameObject.FindGameObjectWithTag("Main UI").GetComponent<UIReference>();
-        
-        inventoryManager = gameObject.GetComponent<InventoryManager>();
-        
+
+        inventoryManager = GetComponent<InventoryManager>();
         playerController = this.AddComponent<PlayerController>();
         playerShoot = this.AddComponent<PlayerShoot>();
+        playerShoot.player = this;
         stats = this.AddComponent<Stats>();
         pauseMenu = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
         miniMap = GameObject.Find("MiniMapCamera").GetComponent<MiniMapScript>();
 
         stats.healthBar = uiReference.healthBar.GetComponent<Bar>();
-        stats.foodBar = uiReference.foodBar.GetComponent<Bar>();
+        stats.foodBar = uiReference.foodBar.GetComponent<BarFood>();
         
         
-        stats.health = 100;
+        stats.health = 100;  //*
         stats.healthBar.SetMax(stats.health);
         stats.healthBar.SetValue(stats.health);
 
-        playerController.player = this;
+        stats.food = 50;
+        stats.foodBar.SetMax(stats.food);
+        stats.foodBar.SetValue(stats.food);
 
+        playerController.player = this;
+        
         playerWeapon.SyncWeapon();
         
-        uiReference.darkBackground.GetComponent<BackgroundDrop>().inventoryManager = inventoryManager;
-        
-        uiReference.debug.GetComponent<DebugItem>().inventoryManager = inventoryManager;
-        NetworkClient.RegisterHandler<InventoryManager.ResponseInventoryAction>(inventoryManager.OnInventoryResponse);
-        
-        inventoryManager.player = this;
         inventoryManager.Enable();
+        inventoryManager.player = this; //*
         pauseMenu.player = this;
+        
+        uiReference.darkBackground.GetComponent<BackgroundDrop>().inventoryManager = inventoryManager;
+
+        uiReference.debug.GetComponent<DebugItem>().inventoryManager = inventoryManager;
+
+        NetworkClient.RegisterHandler<InventoryManager.ResponseInventoryAction>(inventoryManager.OnInventoryResponse);
     }
     
     
@@ -76,13 +81,6 @@ public class Player : NetworkBehaviour
     private void Start()
     {
         name = playerName;
-
-        inventoryManager = gameObject.GetComponent<InventoryManager>();
-        inventoryManager.player = this;
-        if (isServer)
-        {
-            inventory = new List<Item>();
-        }
     }
 
 
@@ -91,7 +89,7 @@ public class Player : NetworkBehaviour
     {
         name = playerName;
     }
-
+    
     // Commands
     [Command]
     void SetupPlayer(string playername)
@@ -100,11 +98,17 @@ public class Player : NetworkBehaviour
     }
 
     [Command]
-    void SetupId(int identifier)
+    void SetupID(int identifier)
     {
         id = identifier;
     }
 
+    [Command]
+    public void Destroy(uint id)
+    {
+        
+        NetworkServer.Destroy(NetworkServer.spawned[id].gameObject);
+    }
 
     [Command]
     public void SpawnInHands(int inHands)
@@ -122,5 +126,17 @@ public class Player : NetworkBehaviour
         {
             stats.AddHealth(damage);
         }
+    }
+    
+    [Command]
+    public void ExportInventory(int id, string data)
+    {
+        SqLiteHandler.Instance.UpdateUser(id,"inventory", data);
+    }
+    
+    [Command]
+    public void ExportStats(int id, string data)
+    {
+        SqLiteHandler.Instance.UpdateUser(id,"stats", data);
     }
 }
