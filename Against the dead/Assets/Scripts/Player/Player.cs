@@ -9,11 +9,12 @@ using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour
 {
-    private Chat _chat;
-
-
     [SyncVar(hook = nameof(OnNameChange))] 
     public string playerName;
+
+    [SyncVar] public int id;
+
+    public readonly int invSize = 32;
 
     public PlayerController playerController;
     public PlayerShoot playerShoot;
@@ -22,7 +23,9 @@ public class Player : NetworkBehaviour
     public PlayerWeapon playerWeapon;
     public PauseMenu pauseMenu;
     public MiniMapScript miniMap;
-    
+    public List<Item> inventory;
+
+
     // Overrides
     public override void OnStartLocalPlayer()
     {
@@ -30,29 +33,43 @@ public class Player : NetworkBehaviour
         Camera.main.transform.SetParent(transform); 
         Camera.main.transform.localPosition = new Vector3(0, 0, 0);
         
-        string playername = NetManager.singleton.GetComponent<Auth>().username;
+        string playername = NetManager.Instance.GetComponent<Auth>().username;
         SetupPlayer(playername);
+        
+        SetupId(((Auth)NetManager.Instance.authenticator).id);
 
+        inventory = new List<Item>();
 
-        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        UIReference uiReference = GameObject.FindGameObjectWithTag("Main UI").GetComponent<UIReference>();
+        
+        inventoryManager = GetComponent<InventoryManager>();
         playerController = this.AddComponent<PlayerController>();
         playerShoot = this.AddComponent<PlayerShoot>();
         stats = this.AddComponent<Stats>();
         pauseMenu = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
         miniMap = GameObject.Find("MiniMapCamera").GetComponent<MiniMapScript>();
 
-        stats.healthBar = GameObject.FindWithTag("Main UI").transform.GetChild(2).GetComponent<Bar>();
-        stats.foodBar = GameObject.FindWithTag("Main UI").transform.GetChild(3).GetComponent<Bar>();
+        stats.healthBar = uiReference.healthBar.GetComponent<Bar>();
+        stats.foodBar = uiReference.foodBar.GetComponent<Bar>();
         
         
-        stats.health = 100;  //*
+        stats.health = 100;
         stats.healthBar.SetMax(stats.health);
         stats.healthBar.SetValue(stats.health);
-        
+
+        playerController.player = this;
+
         playerWeapon.SyncWeapon();
         
-        inventoryManager.player = this; //*
+        inventoryManager.Enable();
+        inventoryManager.player = this;
         pauseMenu.player = this;
+
+        uiReference.darkBackground.GetComponent<BackgroundDrop>().inventoryManager = inventoryManager;
+        
+        uiReference.debug.GetComponent<DebugItem>().inventoryManager = inventoryManager;
+        
+        NetworkClient.RegisterHandler<InventoryManager.ResponseInventoryAction>(inventoryManager.OnInventoryResponse);
     }
     
     
@@ -78,19 +95,11 @@ public class Player : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSpawnItem(int item, int amount, Vector3 position)
+    void SetupId(int identifier)
     {
-        GameObject obj = Instantiate(NetworkManager.singleton.spawnPrefabs[item], position, Quaternion.identity);
-        obj.GetComponent<ItemData>().amount = amount;
-        NetworkServer.Spawn(obj);
+        id = identifier;
     }
 
-    [Command]
-    public void Destroy(uint id)
-    {
-        
-        NetworkServer.Destroy(NetworkServer.spawned[id].gameObject);
-    }
 
     [Command]
     public void SpawnInHands(int inHands)
@@ -121,5 +130,14 @@ public class Player : NetworkBehaviour
     public void ExportStats(int id, string data)
     {
         SqLiteHandler.Instance.UpdateUser(id,"stats", data);
+    }
+    
+    [Command]
+    private void ItemGive(int id)
+    {
+        if (NetworkServer.activeHost)
+        {
+            
+        }
     }
 }

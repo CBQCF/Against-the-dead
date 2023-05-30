@@ -53,7 +53,7 @@ public class PauseMenu : MonoBehaviour
     public void Disconnect()
     {
         pauseMenuUI.SetActive(false);
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu")); 
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
         NetManager.Instance.StopClient();
     }
 

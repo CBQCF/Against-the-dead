@@ -7,11 +7,11 @@ public class PlayerWeapon : NetworkBehaviour
 {
     public GameObject[] weapons;
 
-    public void ChangeVisible(GameObject weapon)
+    public void ChangeVisible(int UID)
     {
         foreach (GameObject wp in weapons)
         {
-            wp.SetActive(wp.GetComponent<ItemData>().item == weapon.GetComponent<ItemData>().item);
+            wp.SetActive(wp.GetComponent<InHandsItem>().UID == UID);
         }
     }
 

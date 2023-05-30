@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Linq;
 using UnityEngine;
 using Mirror;
+using Unity.VisualScripting;
 using UnityEngine.Serialization;
 
 public class NetManager : NetworkManager
 {
-    public struct InventoryAction : NetworkMessage
-    {
-        public string action;
-        public NetworkIdentity identity;
-    }
-
+    private float time = 0.0f;
+    public float interpolationPeriod = 10f;
+    
+    public InventoryManager localInventoryManager;
+    
     public static NetManager Instance
     {
         get
@@ -47,32 +48,44 @@ public class NetManager : NetworkManager
     private static NetManager instance;
 
 
-    public override void OnStartServer()
+    [Server]
+    void Update()
     {
-        base.OnStartServer();
-        NetworkServer.RegisterHandler<InventoryAction>(OnInventoryAction);
+        time += Time.deltaTime;
+ 
+        if (time >= interpolationPeriod) {
+            time = 0.0f;
+
+            foreach (var connection in NetworkServer.connections)
+            {
+                PlayerExport(connection.Value);
+            }
+        }
     }
 
-    public void OnInventoryAction(NetworkConnection conn, InventoryAction msg)
+    public override void OnStartServer()
     {
-        throw new NotImplementedException();
+        localInventoryManager = this.AddComponent<InventoryManager>();
+        NetworkServer.RegisterHandler<InventoryManager.RequestInventoryAction>(localInventoryManager.OnInventoryAction);
     }
+
     public override void OnStopServer() { }
 
     public override void OnClientConnect() { }
 
+    public override void OnServerDisconnect(NetworkConnectionToClient conn) { }
+
+    private void PlayerExport(NetworkConnectionToClient conn)
+    {
+        Player player = conn.identity.GetComponent<Player>();
+        player.ExportInventory(player.id, localInventoryManager.ConvertInventory(player.inventory)); // Export Inventory to DB
+    }
+
     public override void OnClientDisconnect()
     {
-        Player player = NetworkClient.localPlayer.gameObject.GetComponent<Player>();
-        int id = ((Auth)authenticator).id;
-        
-        player.ExportInventory(id, player.inventoryManager.ToString());
-        player.ExportStats(id, player.stats.ToString());
-        
         if (NetworkClient.activeHost)
         {
             StopServer();
         }
     }
-
 }

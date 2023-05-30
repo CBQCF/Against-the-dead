@@ -74,10 +74,7 @@ public class SqLiteHandler
     {
         SQLiteCommand request = new SQLiteCommand(_dbConnection);
         
-        request.CommandText = $"UPDATE users SET @column = @inventory WHERE id = @id";
-
-        request.Parameters.Add("@column", DbType.String);
-        request.Parameters["@column"].Value = column;
+        request.CommandText = $"UPDATE users SET {column} = @inventory WHERE id = @id";
         
         request.Parameters.Add("@id", DbType.String);
         request.Parameters["@id"].Value = id;

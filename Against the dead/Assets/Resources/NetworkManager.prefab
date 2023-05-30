@@ -108,11 +108,13 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 20140543043960277, guid: 3dd0f3843c7a53e4cacbf481922c52ab, type: 3}
   - {fileID: 1613103028034031863, guid: 1156d38eb477a09448d206a2845aa0b6, type: 3}
-  - {fileID: 925908716614716047, guid: 4cc482e6e01b5b7449631984e78eb89f, type: 3}
-  - {fileID: 289003456829574244, guid: c3a27a4d231b90248beae25cabaf1025, type: 3}
-  - {fileID: 7485939422097835960, guid: 6e79e76ce55e3a741bbdcd47aabe969c, type: 3}
-  - {fileID: 1448113354875201996, guid: 5313d0423154dde468ce3d82fa8e1ebb, type: 3}
+  - {fileID: 1117156814982987800, guid: 61484514b9d76c1469c839c3f518994a, type: 3}
+  - {fileID: 1117156814982987800, guid: 68df082323973ac47928250cca9b2b8d, type: 3}
+  - {fileID: 1117156814982987800, guid: 8e4dabb07d0bea44c812d14ddd91e809, type: 3}
+  - {fileID: 1117156814982987800, guid: 9e4283caa690606439829a1dd29a952b, type: 3}
+  - {fileID: 1117156814982987800, guid: eafbbf6e541c2e24da72d24a063fd991, type: 3}
   timeInterpolationGui: 0
+  localInventoryManager: {fileID: 0}
 --- !u!114 &7481535401558639754
 MonoBehaviour:
   m_ObjectHideFlags: 0

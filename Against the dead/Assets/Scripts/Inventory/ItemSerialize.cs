@@ -5,6 +5,6 @@ using UnityEngine.Serialization;
 [Serializable]
 public class ItemSerialize
 {
-    public string name; 
-    public int amount;
+    public string Name; 
+    public int Quantity;
 }
