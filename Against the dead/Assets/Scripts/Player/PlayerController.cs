@@ -110,7 +110,7 @@ public class PlayerController : NetworkBehaviour
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out lookat, player.inventoryManager.pickupRange))
         {
             Item item = lookat.transform.gameObject.GetComponentInParent<Item>();
-            if (item is not null)
+            if (item is not null && item.CanBePickedUp)
             {
                 player.inventoryManager.interactionText.gameObject.SetActive(true);
                 player.inventoryManager.interactionText.text = item.ToString();

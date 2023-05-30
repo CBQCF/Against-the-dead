@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -53,6 +55,7 @@ public class InventoryManager : NetworkBehaviour
         interactionText = uiReference.interaction.GetComponent<TextMeshProUGUI>();
         FetchInventory();
         inventorySlots[selectedSlot].Select();
+        ImportInventory(netIdentity);
     }
 
     [Client]
@@ -84,7 +87,7 @@ public class InventoryManager : NetworkBehaviour
         {
             InvAction.Drop => ServerItemDrop(conn, msg.identity),
             InvAction.Pickup => ServerItemPickup(conn, msg.identity),
-            InvAction.Give => ServerGiveItem(conn, msg.id, out msg.identity),
+            InvAction.Give => ServerGiveItem(conn, msg.id, 1, out msg.identity),
             _ => false
         };
         ResponseInventoryAction response = new ResponseInventoryAction()
@@ -106,12 +109,9 @@ public class InventoryManager : NetworkBehaviour
             
             // Make the object appear on the map
             Transform tranformOnGround = item.refOnGround.transform;
-            item.transform.parent = null;
+            item.NewParent(null);
             item.transform.position = spawnPos;
-            item.transform.rotation = Quaternion.identity;
-            tranformOnGround.position = item.transform.position;
-            tranformOnGround.rotation = Quaternion.identity;
-            item.gameObject.SetActive(true);
+            item.VisibleOnGround(true); 
             return true;
         }
 
@@ -126,9 +126,9 @@ public class InventoryManager : NetworkBehaviour
         
         if (item is not null) // Check if pickable
         {
-            if (Vector3.Distance(connPlayer.transform.position, target.transform.position) < 5) // Check if player is near the item
+            if (item.CanBePickedUp && Vector3.Distance(connPlayer.transform.position, target.transform.position) < 5) // Check if player is near the item
             {
-                (bool possible, Item newItem) = connPlayer.inventoryManager.GetItemAdd(item);
+                (bool possible, Item newItem) = connPlayer.inventoryManager.GetItemAdd(item, item.Quantity);
                 if (possible)
                 {
                     if (newItem is not null)
@@ -139,9 +139,9 @@ public class InventoryManager : NetworkBehaviour
                     }
                     else
                     {
+                        item.VisibleOnGround(false);
+                        item.NewParent(conn.identity);
                         connPlayer.inventory.Add(item);
-                        item.gameObject.SetActive(false);
-                        item.transform.parent = connPlayer.transform;
                     }
                 }
 
@@ -153,30 +153,29 @@ public class InventoryManager : NetworkBehaviour
     }
 
     [Server]
-    private bool ServerGiveItem(NetworkConnection conn, int id, out NetworkIdentity newIdentity)
+    private bool ServerGiveItem(NetworkConnection conn, int id, int quantity, out NetworkIdentity newIdentity)
     {
         GameObject nitem = NetManager.Instance.spawnPrefabs[id];
         Item item = nitem.GetComponent<Item>();
         Player connPlayer = conn.identity.GetComponent<Player>();
-        (bool possible, Item newItem) = connPlayer.inventoryManager.GetItemAdd(item);
+        (bool possible, Item newItem) = connPlayer.inventoryManager.GetItemAdd(item, quantity);
         newIdentity = null;
         if (possible) // Check if inventory is not full
         {
             if (newItem is not null)
             {
-                Item found = connPlayer.inventory.Find(data => newItem.netIdentity == data.netIdentity);
-                found.Quantity += newItem.Quantity;
-                newIdentity = found.netIdentity;
-                NetworkServer.Destroy(newItem.gameObject);
+                newItem.Quantity += newItem.Quantity;
+                newIdentity = newItem.netIdentity;
             }
             else
             {
-                GameObject newGO = Instantiate(nitem);
-                connPlayer.inventory.Add(newGO.GetComponent<Item>());
-                newGO.gameObject.SetActive(false);
-                newGO.transform.parent = connPlayer.transform;
-                NetworkServer.Spawn(newGO);
-                newIdentity = newGO.GetComponent<NetworkIdentity>();
+                GameObject newGameObject = Instantiate(nitem);
+                NetworkServer.Spawn(newGameObject);
+                newItem = newGameObject.GetComponent<Item>();
+                connPlayer.inventory.Add(newItem);
+                newItem.VisibleOnGround(false);
+                newItem.NewParent(connPlayer.netIdentity);
+                newIdentity = newGameObject.GetComponent<NetworkIdentity>();
             }
         }
         return possible;
@@ -223,12 +222,12 @@ public class InventoryManager : NetworkBehaviour
     
     // Inventory managing
     [Server]
-    public (bool, Item) GetItemAdd(Item target)
+    public (bool, Item) GetItemAdd(Item target, int quantity)
     {
         for (int i = 0; i < player.inventory.Count; i++) // Add into items
         {
             Item item = player.inventory[i];
-            if (item != null && item.UID == target.UID && item.Quantity < item.maxStack)
+            if (item != null && item.UID == target.UID && quantity < item.maxStack)
             {
                 return (true, item);
             }
@@ -322,7 +321,8 @@ public class InventoryManager : NetworkBehaviour
     {
         // Add an object into the player's ui slot.
         GameObject itemGameObject = Instantiate(item.refOnInventory, slot.transform);
-        
+        itemGameObject.SetActive(true);
+
     }
     
     [Client]
@@ -379,6 +379,53 @@ public class InventoryManager : NetworkBehaviour
         Destroy(invitem.gameObject);
     }
 
+    [Server]
+    public void ExportInventory(int id, string data)
+    {
+        SqLiteHandler.Instance.UpdateUser(id,"inventory", data);
+    }
+    
+    [Command]
+    public void ImportInventory(NetworkIdentity identity)
+    {
+        Player targetPlayer = identity.GetComponent<Player>();
+        SQLiteDataReader userData = SqLiteHandler.Instance.GetUser(targetPlayer.id);
+        userData.Read();
+        ListWrapper listWrapper = JsonUtility.FromJson<ListWrapper>(userData["inventory"].ToString());
+        foreach (var itemSer in listWrapper.list)
+        {
+            int id = IndexOfItem(itemSer.id);
+
+            NetworkIdentity newNet;
+            if (targetPlayer.inventoryManager.ServerGiveItem(identity.connectionToClient, id, itemSer.Quantity, out newNet))
+            {
+                ResponseInventoryAction response = new ResponseInventoryAction()
+                    { success = true, action = InvAction.Give, identity = newNet };
+                identity.connectionToClient.Send(response);
+            }
+        }
+        
+        
+    }
+
+    public int IndexOfItem(int UID)
+    {
+        for (int i = 0; i < NetManager.Instance.spawnPrefabs.Count; i++)
+        {
+            GameObject spawnable = NetManager.Instance.spawnPrefabs[i];
+            Item item = spawnable.GetComponent<Item>();
+            if (item is not null)
+            {
+                if (item.UID == UID)
+                {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+    
     public string ConvertInventory(List<Item> inv)
     {
         List<ItemSerialize> items = new List<ItemSerialize>();
@@ -388,7 +435,7 @@ public class InventoryManager : NetworkBehaviour
             
             ItemSerialize ser = new ItemSerialize();
             ser.Quantity = item.Quantity;
-            ser.Name = item.Name;
+            ser.id = item.UID;
                 
             items.Add(ser);
         }
@@ -398,9 +445,10 @@ public class InventoryManager : NetworkBehaviour
         
         return JsonUtility.ToJson(listWrapper);
     }
-
+    
+    
     public Item convertFromNetID(NetworkIdentity identity)
     {
-        return identity.gameObject.GetComponent<Item>();
+        return identity.GetComponent<Item>();
     }
 }

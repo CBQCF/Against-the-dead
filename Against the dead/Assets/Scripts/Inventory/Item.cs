@@ -21,6 +21,8 @@ public class Item : NetworkBehaviour
     
     // ItemData
 
+    public bool CanBePickedUp;
+    
     [SyncVar] public int Quantity;
     [SyncVar] public string Name; 
     [ReadOnly] public int UID;
@@ -32,6 +34,69 @@ public class Item : NetworkBehaviour
     public void RefreshCount()
     {
         inventoryItem.RefreshCount();
+    }
+
+    [Server]
+    public void VisibleOnGround(bool status)
+    {
+        CanBePickedUp = status;
+        refOnGround.SetActive(status);
+        refOnInventory.SetActive(!status);
+        VisibleOnGroundRPC(status);
+
+        if (status)
+        {
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        }
+        else
+        {
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        }
+    }
+    
+    [ClientRpc]
+    private void VisibleOnGroundRPC(bool status)
+    {
+        CanBePickedUp = status;
+        refOnGround.SetActive(status);
+        refOnInventory.SetActive(!status);
+        
+        if (status)
+        {
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        }
+        else
+        {
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        }
+    }
+    
+    [Server]
+    public void NewParent(NetworkIdentity parent)
+    {
+        if (parent is null)
+        {
+            transform.parent = null;
+        }
+        else
+        {
+            transform.parent = parent.transform;
+        }
+        
+        NewParentRPC(parent);
+    }
+    
+    [ClientRpc]
+    private void NewParentRPC(NetworkIdentity parent)
+    {
+        if (parent is null)
+        {
+            transform.parent = null;
+        }
+        else
+        {
+            transform.parent = parent.transform;
+        }
     }
 
     public override string ToString()

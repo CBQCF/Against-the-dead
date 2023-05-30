@@ -92,13 +92,13 @@ public class SqLiteHandler
         SQLiteCommand request = new SQLiteCommand(_dbConnection);
         
         request.CommandText = $"INSERT INTO users VALUES(@id, @username, @password, " + // player identifier
-                              "'{{\"list\" : []}}'," + // Inventory
+                              "'{\"list\":[]}'," + // Inventory
                               "'{" + // Player stats
-                              "\"health\" : 100," + 
-                              "\"hunger\" : 100," +
-                              "\"player\" : 0," +
-                              "\"crawler\" : 0," +
-                              "\"normal\" : 0," +
+                              "\"health\":100," + 
+                              "\"hunger\":50," +
+                              "\"player\":0," +
+                              "\"crawler\":0," +
+                              "\"normal\":0," +
                               "}')";
         int id = GenerateId();
         request.Parameters.Add("@id", DbType.Int32);

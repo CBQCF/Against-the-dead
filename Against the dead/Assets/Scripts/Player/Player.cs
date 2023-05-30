@@ -38,11 +38,10 @@ public class Player : NetworkBehaviour
         
         SetupId(((Auth)NetManager.Instance.authenticator).id);
 
-        inventory = new List<Item>();
-
         UIReference uiReference = GameObject.FindGameObjectWithTag("Main UI").GetComponent<UIReference>();
         
-        inventoryManager = GetComponent<InventoryManager>();
+        inventoryManager = gameObject.GetComponent<InventoryManager>();
+        
         playerController = this.AddComponent<PlayerController>();
         playerShoot = this.AddComponent<PlayerShoot>();
         stats = this.AddComponent<Stats>();
@@ -61,15 +60,14 @@ public class Player : NetworkBehaviour
 
         playerWeapon.SyncWeapon();
         
-        inventoryManager.Enable();
-        inventoryManager.player = this;
-        pauseMenu.player = this;
-
         uiReference.darkBackground.GetComponent<BackgroundDrop>().inventoryManager = inventoryManager;
         
         uiReference.debug.GetComponent<DebugItem>().inventoryManager = inventoryManager;
-        
         NetworkClient.RegisterHandler<InventoryManager.ResponseInventoryAction>(inventoryManager.OnInventoryResponse);
+        
+        inventoryManager.player = this;
+        inventoryManager.Enable();
+        pauseMenu.player = this;
     }
     
     
@@ -78,6 +76,13 @@ public class Player : NetworkBehaviour
     private void Start()
     {
         name = playerName;
+
+        inventoryManager = gameObject.GetComponent<InventoryManager>();
+        inventoryManager.player = this;
+        if (isServer)
+        {
+            inventory = new List<Item>();
+        }
     }
 
 
@@ -116,28 +121,6 @@ public class Player : NetworkBehaviour
         if (stats != null)
         {
             stats.AddHealth(damage);
-            Debug.Log("le joueur à du perdre de la vie");
-        }
-    }
-    
-    [Command]
-    public void ExportInventory(int id, string data)
-    {
-        SqLiteHandler.Instance.UpdateUser(id,"inventory", data);
-    }
-    
-    [Command]
-    public void ExportStats(int id, string data)
-    {
-        SqLiteHandler.Instance.UpdateUser(id,"stats", data);
-    }
-    
-    [Command]
-    private void ItemGive(int id)
-    {
-        if (NetworkServer.activeHost)
-        {
-            
         }
     }
 }

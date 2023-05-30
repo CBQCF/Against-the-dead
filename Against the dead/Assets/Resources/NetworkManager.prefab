@@ -106,6 +106,7 @@ MonoBehaviour:
   autoCreatePlayer: 0
   playerSpawnMethod: 1
   spawnPrefabs:
+  - {fileID: 6146770916117376450, guid: d31e8be612ec84fb3b435fdad1064b55, type: 3}
   - {fileID: 20140543043960277, guid: 3dd0f3843c7a53e4cacbf481922c52ab, type: 3}
   - {fileID: 1613103028034031863, guid: 1156d38eb477a09448d206a2845aa0b6, type: 3}
   - {fileID: 1117156814982987800, guid: 61484514b9d76c1469c839c3f518994a, type: 3}
@@ -114,6 +115,7 @@ MonoBehaviour:
   - {fileID: 1117156814982987800, guid: 9e4283caa690606439829a1dd29a952b, type: 3}
   - {fileID: 1117156814982987800, guid: eafbbf6e541c2e24da72d24a063fd991, type: 3}
   timeInterpolationGui: 0
+  interpolationPeriod: 10
   localInventoryManager: {fileID: 0}
 --- !u!114 &7481535401558639754
 MonoBehaviour:

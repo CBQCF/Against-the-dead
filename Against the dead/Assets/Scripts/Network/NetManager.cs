@@ -10,7 +10,7 @@ using UnityEngine.Serialization;
 public class NetManager : NetworkManager
 {
     private float time = 0.0f;
-    public float interpolationPeriod = 10f;
+    public float interpolationPeriod = 5f;
     
     public InventoryManager localInventoryManager;
     
@@ -78,7 +78,7 @@ public class NetManager : NetworkManager
     private void PlayerExport(NetworkConnectionToClient conn)
     {
         Player player = conn.identity.GetComponent<Player>();
-        player.ExportInventory(player.id, localInventoryManager.ConvertInventory(player.inventory)); // Export Inventory to DB
+        localInventoryManager.ExportInventory(player.id, localInventoryManager.ConvertInventory(player.inventory)); // Export Inventory to DB
     }
 
     public override void OnClientDisconnect()
