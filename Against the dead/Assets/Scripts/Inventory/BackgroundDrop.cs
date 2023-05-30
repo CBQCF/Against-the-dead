@@ -4,6 +4,11 @@ using UnityEngine.EventSystems;
 public class BackgroundDrop : MonoBehaviour, IDropHandler
 {
     public InventoryManager inventoryManager;
+
+    public void CloseInventory()
+    {
+        inventoryManager.SwitchInventory();
+    }
     
     public void OnDrop(PointerEventData eventData)
     {
@@ -11,7 +16,7 @@ public class BackgroundDrop : MonoBehaviour, IDropHandler
         {
             GameObject dropped = eventData.pointerDrag;
             InventoryItem inventoryItem = dropped.GetComponent<InventoryItem>();
-            inventoryManager.DropItem(inventoryItem);
+            inventoryManager.InventoryInteraction(inventoryItem.item.netIdentity, InventoryManager.InvAction.Drop);
         }
     }   
 }

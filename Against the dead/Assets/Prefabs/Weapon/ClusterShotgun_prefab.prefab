@@ -99,7 +99,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   item: {fileID: 11400000, guid: c5f6dcc25fd8e2a4d9fba4b43552ed52, type: 2}
-  amount: 0
+  amount: 1
 --- !u!114 &5353545102163772353
 MonoBehaviour:
   m_ObjectHideFlags: 0

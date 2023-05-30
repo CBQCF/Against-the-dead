@@ -14,7 +14,7 @@ public class PlayerController : NetworkBehaviour
     private Vector3 _moveD = Vector3.zero;
     
     private CharacterController _characterController;
-    private Player _player;
+    public Player player;
     private Camera _cam;
 
     public bool inInterface;
@@ -66,7 +66,6 @@ public class PlayerController : NetworkBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         _characterController = GetComponent<CharacterController>();
-        _player = GetComponent<Player>();
         _cam = Camera.main;
     }
 
@@ -80,7 +79,7 @@ public class PlayerController : NetworkBehaviour
         
         if (Input.GetKeyDown(KeyCode.E))
         {
-            _player.inventoryManager.SwitchInventory();
+            player.inventoryManager.SwitchInventory();
         }
 
         if (Input.inputString != null)
@@ -88,45 +87,45 @@ public class PlayerController : NetworkBehaviour
             bool isNumber = int.TryParse(Input.inputString, out int number);
             if (isNumber && number > 0 && number < 9)
             {
-                _player.inventoryManager.ChangeSelectedSlot(number - 1);
+                player.inventoryManager.ChangeSelectedSlot(number - 1);
             }
         }
         
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
-            if (_player.inventoryManager.selectedSlot == 7)
-                _player.inventoryManager.ChangeSelectedSlot(0);
+            if (player.inventoryManager.selectedSlot == 7)
+                player.inventoryManager.ChangeSelectedSlot(0);
             else
-                _player.inventoryManager.ChangeSelectedSlot(_player.inventoryManager.selectedSlot+1);
+                player.inventoryManager.ChangeSelectedSlot(player.inventoryManager.selectedSlot+1);
         }
         if (Input.GetAxis("Mouse ScrollWheel") < 0f)
         {
-            if (_player.inventoryManager.selectedSlot == 0)
-                _player.inventoryManager.ChangeSelectedSlot(7);
+            if (player.inventoryManager.selectedSlot == 0)
+                player.inventoryManager.ChangeSelectedSlot(7);
             else
-                _player.inventoryManager.ChangeSelectedSlot(_player.inventoryManager.selectedSlot-1);
+                player.inventoryManager.ChangeSelectedSlot(player.inventoryManager.selectedSlot-1);
         }
 
         RaycastHit lookat;
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out lookat, _player.inventoryManager.pickupRange))
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out lookat, player.inventoryManager.pickupRange))
         {
-            ItemData item = lookat.transform.gameObject.GetComponent<ItemData>();
+            Item item = lookat.transform.gameObject.GetComponentInParent<Item>();
             if (item is not null)
             {
-                _player.inventoryManager.interactionText.gameObject.SetActive(true);
-                _player.inventoryManager.interactionText.text = item.ToString();
+                player.inventoryManager.interactionText.gameObject.SetActive(true);
+                player.inventoryManager.interactionText.text = item.ToString();
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    _player.inventoryManager.PickupItem(item);
+                    player.inventoryManager.InventoryInteraction(item.netIdentity, InventoryManager.InvAction.Pickup);
                 }
             }
             else
             {
-                _player.inventoryManager.interactionText.gameObject.SetActive(false);
+                player.inventoryManager.interactionText.gameObject.SetActive(false);
             }
         }
         
-        _player.inventoryManager.WeaponInHands();
+        player.inventoryManager.WeaponInHands();
         
     }
 }

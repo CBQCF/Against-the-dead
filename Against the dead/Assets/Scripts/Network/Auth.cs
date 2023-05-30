@@ -75,13 +75,11 @@ public class Auth : NetworkAuthenticator
             SQLiteDataReader user = SqLiteHandler.Instance.GetUser(msg.userName);
             if (user.Read()) // User already exists
             {
-                Debug.Log("Found");
                 id = (int)user["id"];
                 valid = SqLiteHandler.Instance.CheckPassword(msg.userName, msg.userPassword); // Check password
             }
             else
             {
-                Debug.Log("Not Found");
                 id = SqLiteHandler.Instance.RegisterUser(msg.userName, msg.userPassword); // Register new user
                 valid = true;
             }
