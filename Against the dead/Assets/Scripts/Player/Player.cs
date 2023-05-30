@@ -37,18 +37,23 @@ public class Player : NetworkBehaviour
         inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
         playerController = this.AddComponent<PlayerController>();
         playerShoot = this.AddComponent<PlayerShoot>();
+        playerShoot.player = this;
         stats = this.AddComponent<Stats>();
         pauseMenu = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
         miniMap = GameObject.Find("MiniMapCamera").GetComponent<MiniMapScript>();
 
         stats.healthBar = GameObject.FindWithTag("Main UI").transform.GetChild(2).GetComponent<Bar>();
-        stats.foodBar = GameObject.FindWithTag("Main UI").transform.GetChild(3).GetComponent<Bar>();
+        stats.foodBar = GameObject.FindWithTag("Main UI").transform.GetChild(3).GetComponent<BarFood>();
         
         
         stats.health = 100;  //*
         stats.healthBar.SetMax(stats.health);
         stats.healthBar.SetValue(stats.health);
-        
+
+        stats.food = 50;
+        stats.foodBar.SetMax(stats.food);
+        stats.foodBar.SetValue(stats.food);
+
         playerWeapon.SyncWeapon();
         
         inventoryManager.player = this; //*
@@ -107,7 +112,6 @@ public class Player : NetworkBehaviour
         if (stats != null)
         {
             stats.AddHealth(damage);
-            Debug.Log("le joueur à du perdre de la vie");
         }
     }
     

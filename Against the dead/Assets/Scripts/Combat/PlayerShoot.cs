@@ -26,19 +26,24 @@ public class PlayerShoot : NetworkBehaviour
             Shoot();
         }
     }
-
+    
     void Shoot()
     {
         
         //muzzleFlash.Play();
         RaycastHit hit;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range) && hit.transform.tag != "Terrain")
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
             Stats target = hit.transform.GetComponent<Stats>();
             if (target is not null)
             {
                 target.AddHealth(damage);
+                if (target.health <= 0 || target is null)
+                {
+                    player.stats.AddFood();
+                }
             }
         }
+        
     }
 }

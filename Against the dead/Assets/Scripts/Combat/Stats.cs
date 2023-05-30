@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Telepathy;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
@@ -9,6 +10,7 @@ public class Stats : NetworkBehaviour
 {
     [SyncVar(hook = nameof(OnDamageTaken))]
     public int health;
+    [SyncVar]
     public int food;
     public int playerKill;
     public int normalKill; 
@@ -16,8 +18,8 @@ public class Stats : NetworkBehaviour
     
     
     public Bar healthBar;
-    public Bar foodBar;
-    
+    public BarFood foodBar;
+
     public int GetPlayerCount()
     {
         if (NetworkServer.active)
@@ -27,7 +29,8 @@ public class Stats : NetworkBehaviour
         }
         else if (NetworkClient.isConnected)
         {
-            // Si vous êtes un client
+            NetworkManager.singleton.StopServer();
+            NetworkManager.Destroy(this.gameObject);
             return 1; // Un seul joueur (vous-même)
         }
 
@@ -56,7 +59,8 @@ public class Stats : NetworkBehaviour
             }
             else
             {
-                NetworkServer.Destroy(this.gameObject);
+                NetworkServer.Destroy(gameObject);
+                Debug.Log("faire spawn une arme");
             }
         }
     }
@@ -64,7 +68,11 @@ public class Stats : NetworkBehaviour
     public void AddHealth(int damage)
     {
         health -= damage;
-        if (healthBar is not null) healthBar.SetValue(health);
+        if (healthBar is not null)
+        {
+            healthBar.SetValue(health);
+        }
+
         if (health <= 0)
         {
             if (gameObject.CompareTag("Player"))
@@ -80,6 +88,31 @@ public class Stats : NetworkBehaviour
                 NetworkServer.Destroy(this.gameObject);
             }
         }
+    }
+
+    [Server]
+    public void SubFood()
+    {
+        food -= 2;
+        foodBar.SetValue(food);
+        if (food <= 0)
+        {
+            SceneManager.LoadScene("GameOver");
+            Cursor.lockState = CursorLockMode.None;
+            NetworkManager.singleton.StopClient();
+            NetworkServer.Destroy(this.gameObject);
+        }
+    }
+    
+    public void AddFood()
+    {
+        food += 5;
+        if (food > 50)
+        {
+            food = 50;
+        }
+        foodBar.SetValue(food);
+        
     }
 
     public override string ToString()
