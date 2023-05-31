@@ -13,7 +13,7 @@ public class Zombie : NetworkBehaviour
     void Start()
     {
         position = GetComponent<Transform>();
-        Stats st = this.AddComponent<Stats>();
+        Stats st = GetComponent<Stats>();
         st.healthBar = healthBar;
         if (isServer)
         {

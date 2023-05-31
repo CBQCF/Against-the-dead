@@ -71,7 +71,8 @@ public class NetManager : NetworkManager
 
     public override void OnStopServer() { }
 
-    public override void OnClientConnect() { }
+    public override void OnClientConnect()
+    { }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn) { }
 

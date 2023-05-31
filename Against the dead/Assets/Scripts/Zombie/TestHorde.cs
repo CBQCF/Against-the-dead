@@ -38,11 +38,14 @@ public class TestHorde : NetworkBehaviour
         Gizmos.DrawWireCube(transform.position, zoneSize);
     }
 
+    [Server]
     public void SpawnHorde()
     {
         var position = randomSpawn();
-        GameObject horde = Instantiate(hordePrefab, position, Quaternion.identity);
-        horde.GetComponent<horde>().spawner = this;
-        NetworkServer.Spawn(horde);
+        GameObject hordeGameObject = Instantiate(hordePrefab, position, Quaternion.identity);
+        horde hodreComponment = hordeGameObject.GetComponent<horde>();
+        hodreComponment.spawner = this;
+        NetworkServer.Spawn(hordeGameObject);
+        hodreComponment.SyncParent();
     }
 }

@@ -40,23 +40,18 @@ public class Player : NetworkBehaviour
         
         UIReference uiReference = GameObject.FindGameObjectWithTag("Main UI").GetComponent<UIReference>();
 
-        inventoryManager = GetComponent<InventoryManager>();
         playerController = this.AddComponent<PlayerController>();
         playerShoot = this.AddComponent<PlayerShoot>();
         playerShoot.player = this;
-        stats = this.AddComponent<Stats>();
         pauseMenu = GameObject.Find("PauseMenu").GetComponent<PauseMenu>();
         miniMap = GameObject.Find("MiniMapCamera").GetComponent<MiniMapScript>();
 
         stats.healthBar = uiReference.healthBar.GetComponent<Bar>();
         stats.foodBar = uiReference.foodBar.GetComponent<BarFood>();
         
-        
-        stats.health = 100;  //*
         stats.healthBar.SetMax(stats.health);
         stats.healthBar.SetValue(stats.health);
 
-        stats.food = 50;
         stats.foodBar.SetMax(stats.food);
         stats.foodBar.SetValue(stats.food);
 
@@ -73,11 +68,32 @@ public class Player : NetworkBehaviour
         inventoryManager.player = this; //*
         inventoryManager.Enable();
         pauseMenu.player = this;
+
+        SyncZombies();
     }
     
     
     // Functions
 
+    private void SyncZombies()
+    {
+        
+        foreach (var objectIdentity in NetworkClient.spawned)
+        {
+            horde horde = objectIdentity.Value.GetComponent<horde>();
+            if (horde is not null)
+            {
+                foreach (var zombieID in horde.zombies)
+                {
+                    if (NetworkClient.spawned.TryGetValue(zombieID, out var zombie))
+                    {
+                        zombie.transform.parent = horde.transform;
+                    }
+                }
+            }
+        }
+    }
+    
     private void Start()
     {
         name = playerName;
@@ -116,23 +132,13 @@ public class Player : NetworkBehaviour
         GameObject item = Instantiate(NetManager.Instance.spawnPrefabs[inHands], transform);
         NetworkServer.Spawn(item, new LocalConnectionToClient());
     }
-    
-    [Command]
-    public void CmdInflictDamage(int damage)
-    {
-        Stats stats = GetComponent<Stats>();
-        Bar healthBar = GetComponent<Bar>();
-        if (stats != null)
-        {
-            stats.AddHealth(damage);
-        }
-    }
 
     [TargetRpc]
     public void DisconnectRPC()
     {
         SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Main"));
+        NetManager.Destroy(gameObject);
         NetManager.Instance.StopClient();
     }
     
@@ -141,6 +147,27 @@ public class Player : NetworkBehaviour
     {
         SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Main"));
+        NetManager.Destroy(gameObject);
         NetManager.Instance.StopClient(); 
+    }
+    
+    [Command]
+    public void ShootCommand(uint target, uint shooter, uint weapon)
+    {
+        Player shooterPlayer = NetworkServer.spawned[shooter].GetComponent<Player>();
+        if (shooterPlayer.inventory.Exists(data => data.netId == weapon)) // Check if player has the weapon
+        {
+            Stats targetStats = NetworkServer.spawned[target].GetComponent<Stats>();
+            WeaponData weaponData = NetworkServer.spawned[weapon].GetComponent<WeaponData>();
+            int range = weaponData is not null ? weaponData.ammo.AmmoRange : 1;
+            int damage = weaponData is not null ? weaponData.ammo.Damage : 10;
+            if (targetStats is not null && Vector3.Distance(transform.position, targetStats.transform.position) <= range)
+            {
+                if (targetStats.DealDamage(damage))
+                {
+                    shooterPlayer.stats.AddFood();
+                }
+            }
+        }
     }
 }

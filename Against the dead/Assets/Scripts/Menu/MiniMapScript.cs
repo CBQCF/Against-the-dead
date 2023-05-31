@@ -14,7 +14,7 @@ public class MiniMapScript : MonoBehaviour
         _transform = Camera.main.transform;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         if (_transform is not null)
         {

@@ -30,21 +30,33 @@ public class ZombieCharacterControl : NetworkBehaviour
     private Vector3 _mCurrentDirection = Vector3.zero;
     public ServerInfo serverInfo;
 
+    public GameObject target;
+    
     private void Awake()
     {
         mAnimator = GetComponent<Animator>();
     }
+
+    private GameObject ClosestPlayer()
+    {
+        GameObject result = serverInfo.playerList[0];
+        foreach (var player in serverInfo.playerList)
+        {
+            if (Vector3.Distance(transform.position, player.transform.position) <
+                Vector3.Distance(transform.position, result.transform.position))
+            {
+                result = player;
+            }
+        }
+
+        return result;
+    }
     
     private void LateUpdate()
     {
-        GameObject[] mPlayers = serverInfo.playerList;
-
-        for(int i = 0; i < mPlayers.Length; i++)
-        {
-            GameObject player = mPlayers[i];
-            Vector3 playerDirection = player.transform.position - transform.position;
+        GameObject player = ClosestPlayer();
+        Vector3 playerDirection = player.transform.position - transform.position;
             float distanceToPlayer = playerDirection.magnitude;
-
             if (distanceToPlayer > mDetectionDistance)
             {
                 _mControlMode = ControlMode.Tank;
@@ -64,6 +76,7 @@ public class ZombieCharacterControl : NetworkBehaviour
                 {
                     isAttacking = true;
                     mAnimator.SetBool("should_attack", true);
+                    target = player;
                     InvokeRepeating(nameof(PerformAttack), attackDelay, attackInterval);
                 }
             }
@@ -73,6 +86,7 @@ public class ZombieCharacterControl : NetworkBehaviour
                 {
                     isAttacking = false;
                     mAnimator.SetBool("should_attack", false);
+                    target = null;
                     CancelInvoke(nameof(PerformAttack));
                 }
             }
@@ -87,17 +101,12 @@ public class ZombieCharacterControl : NetworkBehaviour
                     TankUpdate();
                     break;
             }
-        }
     }
-
+    
+    [Server]
     private void PerformAttack()
     {
-        GameObject[] mPlayers = serverInfo.playerList;
-
-        foreach (GameObject player in mPlayers)
-        {
-            player.GetComponent<Player>().CmdInflictDamage(10);
-        }
+        target.GetComponent<Stats>().DealDamage(10);
     }
 
     private void TankUpdate()

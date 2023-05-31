@@ -100,7 +100,7 @@ public class InventoryManager : NetworkBehaviour
     private bool ServerItemDrop(NetworkConnection conn, NetworkIdentity target)
     {
         Player connPlayer = conn.identity.GetComponent<Player>();
-        Item item = convertFromNetID(target);
+        Item item = ConvertFromNetID(target);
         if (item is not null && connPlayer.inventory.Exists(data => data.netIdentity.netId == target.netId)) // Player has the item
         {
             connPlayer.inventory.Remove(item);
@@ -122,7 +122,7 @@ public class InventoryManager : NetworkBehaviour
     private bool ServerItemPickup(NetworkConnection conn, NetworkIdentity target)
     {
         Player connPlayer = conn.identity.GetComponent<Player>();
-        Item item = convertFromNetID(target);
+        Item item = ConvertFromNetID(target);
         
         if (item is not null) // Check if pickable
         {
@@ -202,7 +202,7 @@ public class InventoryManager : NetworkBehaviour
     [Client]
     public void OnInventoryResponse(ResponseInventoryAction response)
     {
-        Item item = convertFromNetID(response.identity);
+        Item item = ConvertFromNetID(response.identity);
         if (response.success)
         {
             if (response.action == InvAction.Pickup)
@@ -447,7 +447,7 @@ public class InventoryManager : NetworkBehaviour
     }
     
     
-    public Item convertFromNetID(NetworkIdentity identity)
+    public Item ConvertFromNetID(NetworkIdentity identity)
     {
         return identity.GetComponent<Item>();
     }

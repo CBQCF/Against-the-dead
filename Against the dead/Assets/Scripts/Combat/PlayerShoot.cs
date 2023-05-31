@@ -1,24 +1,21 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class PlayerShoot : NetworkBehaviour
+public class PlayerShoot : MonoBehaviour
 {
     public Player player;
 
     public int damage;
     public int range;
 
-    private Camera fpsCam;
+    private Camera _fpsCam;
     //public ParticleSystem muzzleFlash;
 
     private void Start()
     {
-        fpsCam = Camera.main;
+        _fpsCam = Camera.main;
     }
-
+    
     private void Update()
     {
         if (Input.GetButtonDown("Fire1"))
@@ -29,21 +26,14 @@ public class PlayerShoot : NetworkBehaviour
     
     void Shoot()
     {
-        
         //muzzleFlash.Play();
-        RaycastHit hit;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        if (Physics.Raycast(_fpsCam.transform.position, _fpsCam.transform.forward, out var hit, range))
         {
             Stats target = hit.transform.GetComponent<Stats>();
             if (target is not null)
             {
-                target.AddHealth(damage);
-                if (target.health <= 0 || target is null)
-                {
-                    player.stats.AddFood();
-                }
+                player.ShootCommand(target.gameObject.GetComponent<NetworkIdentity>().netId, player.netId, player.inventoryManager.GetSelectedItem(false).netId);
             }
         }
-        
     }
 }

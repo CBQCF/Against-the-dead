@@ -20,7 +20,13 @@ public class PlayerManager : NetworkBehaviour
                 foreach (var player in serverInfo.playerList)
                 {
                     Stats playerStats = player.GetComponent<Stats>();
-                    if(playerStats is not null) playerStats.SubFood();
+                    if (playerStats is not null)
+                    {
+                        if (playerStats.SubFood())
+                        {
+                            player.GetComponent<Player>().DisconnectRPC();
+                        }
+                    }
                 }
                 timer = 5f;
             }

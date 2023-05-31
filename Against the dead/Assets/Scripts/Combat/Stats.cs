@@ -8,17 +8,24 @@ using UnityEngine.Serialization;
 
 public class Stats : NetworkBehaviour
 {
-    [SyncVar(hook = nameof(OnDamageTaken))]
+    [SyncVar(hook = nameof(UpdateHealthBar))]
     public int health;
-    [SyncVar]
+    [SyncVar(hook = nameof(UpdateFoodBar))]
     public int food;
+    
     public int playerKill;
     public int normalKill; 
     public int crawlerKill;
-    
-    
+
     public Bar healthBar;
     public BarFood foodBar;
+    
+    [Server]
+    private void Awake()
+    {
+        health = 100;
+        food = 50;
+    }
 
     public int GetPlayerCount()
     {
@@ -38,72 +45,58 @@ public class Stats : NetworkBehaviour
         return -1;
     }
 
-    private void OnDamageTaken(int oldValue, int newValue)
-    {
-        if (healthBar is not null) healthBar.SetValue(newValue);
-        if (newValue <= 0)
-        {
-            if (gameObject.CompareTag("Player"))
-            {
-                // Charger la scène GameOver
-                SceneManager.LoadScene("GameOver");
-                Cursor.lockState = CursorLockMode.None;
-                NetworkManager.singleton.StopClient();
-                NetworkServer.Destroy(this.gameObject);
-                Debug.Log(GetPlayerCount());
-                if (GetPlayerCount() == 1 || GetPlayerCount() == 0 || GetPlayerCount() == -1)
-                {
-                    NetworkManager.singleton.StopServer();
-                    Debug.Log("arret serveur");
-                }
-            }
-            else
-            {
-                NetworkServer.Destroy(gameObject);
-                Debug.Log("faire spawn une arme");
-            }
-        }
-    }
-    
-    public void AddHealth(int damage)
+    [Server]
+    public bool DealDamage(int damage)
     {
         health -= damage;
-        if (healthBar is not null)
-        {
-            healthBar.SetValue(health);
-        }
 
         if (health <= 0)
         {
-            if (gameObject.CompareTag("Player"))
-            {
-                // Charger la scène GameOver
-                SceneManager.LoadScene("GameOver");
-                Cursor.lockState = CursorLockMode.None;
-                NetworkManager.singleton.StopClient();
-                NetworkServer.Destroy(this.gameObject);
-            }
-            else
-            {
-                NetworkServer.Destroy(this.gameObject);
-            }
+            OnKill();
+            return true;
         }
+        
+        return false;
     }
 
     [Server]
-    public void SubFood()
+    public void OnKill()
     {
-        food -= 2;
-        foodBar.SetValue(food);
-        if (food <= 0)
+        if (gameObject.CompareTag("Player"))
         {
-            SceneManager.LoadScene("GameOver");
-            Cursor.lockState = CursorLockMode.None;
-            NetworkManager.singleton.StopClient();
+            gameObject.GetComponent<Player>().DisconnectRPC();
+        }
+        else
+        {
             NetworkServer.Destroy(this.gameObject);
         }
     }
     
+    [Client]
+    public void UpdateHealthBar(int _old, int _new)
+    {
+        if (healthBar is not null)
+        {
+            healthBar.SetValue(_new);
+        }
+    }
+
+    [Server]
+    public bool SubFood()
+    {
+        food -= 2;
+        return food <= 0;
+    }
+
+    void UpdateFoodBar(int _old, int _new)
+    {
+        if (foodBar is not null)
+        {
+            foodBar.SetValue(_new);
+        }
+    }
+    
+    [Server]
     public void AddFood()
     {
         food += 5;
@@ -111,8 +104,6 @@ public class Stats : NetworkBehaviour
         {
             food = 50;
         }
-        foodBar.SetValue(food);
-        
     }
 
     public override string ToString()

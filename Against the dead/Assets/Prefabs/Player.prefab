@@ -3425,13 +3425,13 @@ GameObject:
   - component: {fileID: 5553147980876418125}
   - component: {fileID: 4156150128069351124}
   - component: {fileID: 8512102330098473176}
+  - component: {fileID: -2727033168672293467}
   - component: {fileID: 4034022968940798482}
   - component: {fileID: 3635420948098187189}
   - component: {fileID: 2783861355060072147}
   - component: {fileID: 3635649328723638489}
   - component: {fileID: 790027045351420373}
   - component: {fileID: 776404977299694315}
-  - component: {fileID: 2396785009439321895}
   - component: {fileID: 5805486175905672870}
   m_Layer: 0
   m_Name: Player
@@ -3480,8 +3480,8 @@ MonoBehaviour:
   id: 0
   playerController: {fileID: 0}
   playerShoot: {fileID: 0}
-  inventoryManager: {fileID: 0}
-  stats: {fileID: 0}
+  inventoryManager: {fileID: 8512102330098473176}
+  stats: {fileID: -2727033168672293467}
   playerWeapon: {fileID: 4156150128069351124}
   pauseMenu: {fileID: 0}
   miniMap: {fileID: 0}
@@ -3528,6 +3528,28 @@ MonoBehaviour:
   interactionText: {fileID: 0}
   player: {fileID: 0}
   pickupRange: 3
+--- !u!114 &-2727033168672293467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2516510491654491807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9abfc932112434c4881a1659dcf33dca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  health: 0
+  food: 0
+  playerKill: 0
+  normalKill: 0
+  crawlerKill: 0
+  healthBar: {fileID: 0}
+  foodBar: {fileID: 0}
 --- !u!33 &4034022968940798482
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3654,34 +3676,6 @@ MonoBehaviour:
   compressRotation: 0
   positionPrecision: 0.01
   scalePrecision: 0.01
---- !u!114 &2396785009439321895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2516510491654491807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 1
-  syncMode: 0
-  syncInterval: 0
-  target: {fileID: 5612611286711994227}
-  clientAuthority: 0
-  syncPosition: 1
-  syncRotation: 1
-  syncScale: 0
-  showGizmos: 0
-  showOverlay: 0
-  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
-  onlySyncOnChange: 1
-  bufferResetMultiplier: 5
-  positionSensitivity: 0.01
-  rotationSensitivity: 0.01
-  scaleSensitivity: 0.01
 --- !u!114 &5805486175905672870
 MonoBehaviour:
   m_ObjectHideFlags: 0
