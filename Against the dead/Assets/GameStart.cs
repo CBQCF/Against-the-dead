@@ -9,6 +9,7 @@ public class GameStart : MonoBehaviour
     void Start()
     {
         SceneLoader();
+        Cursor.lockState = CursorLockMode.None;
     }
 
     void SceneLoader()
