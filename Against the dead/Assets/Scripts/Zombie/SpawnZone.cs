@@ -84,6 +84,7 @@ public class SpawnZone : NetworkBehaviour
     [Server]
     void Update()
     {
+        
         SpawnZombies();
     }
 

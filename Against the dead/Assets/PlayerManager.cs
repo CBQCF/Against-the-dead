@@ -19,7 +19,8 @@ public class PlayerManager : NetworkBehaviour
             {
                 foreach (var player in serverInfo.playerList)
                 {
-                    player.GetComponent<Stats>().SubFood();
+                    Stats playerStats = player.GetComponent<Stats>();
+                    if(playerStats is not null) playerStats.SubFood();
                 }
                 timer = 5f;
             }

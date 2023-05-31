@@ -111,7 +111,13 @@ public class ConnectionHandler : MonoBehaviour
                 {
                     NetworkClient.AddPlayer();
                 }
+                
+                if (NetworkClient.activeHost)
+                {
+                    GameObject.Find("ZombieSpawn").GetComponent<TestHorde>().HordeInit();
+                }
             }
+            
         }
         else
         {

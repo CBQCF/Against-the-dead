@@ -26,17 +26,19 @@ public class horde : NetworkBehaviour
                     Random.Range(transform.position.z - 10, transform.position.z + 10)
                 );
                 GameObject Zombie = Instantiate(zombiePrefab, spawnpos, Quaternion.identity);
-                Zombie.transform.parent = gameObject.transform;
+                Zombie.AddComponent<Rigidbody>();
                 ZombieCharacterControl zcc = Zombie.AddComponent<ZombieCharacterControl>();
                 zcc.serverInfo = spawner.serverInfo;
                 NetworkServer.Spawn(Zombie);
+                Zombie.transform.parent = gameObject.transform;
             }
 
             GameObject Boss = Instantiate(crawlerPrefab, transform.position, Quaternion.identity);
-            Boss.transform.parent = gameObject.transform;
+            Boss.AddComponent<Rigidbody>();
             ZombieCharacterControl zccc = Boss.AddComponent<ZombieCharacterControl>();
             zccc.serverInfo = spawner.serverInfo;
             NetworkServer.Spawn(Boss);
+            Boss.transform.parent = gameObject.transform;
         }
     }
 

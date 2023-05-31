@@ -5,6 +5,7 @@ using UnityEngine;
 using Mirror;
 using Mirror.Authenticators;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour
@@ -36,7 +37,6 @@ public class Player : NetworkBehaviour
         SetupPlayer(playername);
 
         SetupID(((Auth)NetManager.Instance.authenticator).id);
-        inventory = new List<Item>();
         
         UIReference uiReference = GameObject.FindGameObjectWithTag("Main UI").GetComponent<UIReference>();
 
@@ -63,16 +63,16 @@ public class Player : NetworkBehaviour
         playerController.player = this;
         
         playerWeapon.SyncWeapon();
-        
-        inventoryManager.Enable();
-        inventoryManager.player = this; //*
-        pauseMenu.player = this;
-        
+
         uiReference.darkBackground.GetComponent<BackgroundDrop>().inventoryManager = inventoryManager;
 
         uiReference.debug.GetComponent<DebugItem>().inventoryManager = inventoryManager;
 
         NetworkClient.RegisterHandler<InventoryManager.ResponseInventoryAction>(inventoryManager.OnInventoryResponse);
+        
+        inventoryManager.player = this; //*
+        inventoryManager.Enable();
+        pauseMenu.player = this;
     }
     
     
@@ -81,6 +81,13 @@ public class Player : NetworkBehaviour
     private void Start()
     {
         name = playerName;
+        
+        inventoryManager = gameObject.GetComponent<InventoryManager>();
+        inventoryManager.player = this;
+        if (isServer)
+        {
+            inventory = new List<Item>();
+        }
     }
 
 
@@ -102,18 +109,11 @@ public class Player : NetworkBehaviour
     {
         id = identifier;
     }
-
-    [Command]
-    public void Destroy(uint id)
-    {
-        
-        NetworkServer.Destroy(NetworkServer.spawned[id].gameObject);
-    }
-
+    
     [Command]
     public void SpawnInHands(int inHands)
     {
-        GameObject item = Instantiate(NetworkManager.singleton.spawnPrefabs[inHands], transform);
+        GameObject item = Instantiate(NetManager.Instance.spawnPrefabs[inHands], transform);
         NetworkServer.Spawn(item, new LocalConnectionToClient());
     }
     
@@ -127,16 +127,20 @@ public class Player : NetworkBehaviour
             stats.AddHealth(damage);
         }
     }
-    
-    [Command]
-    public void ExportInventory(int id, string data)
+
+    [TargetRpc]
+    public void DisconnectRPC()
     {
-        SqLiteHandler.Instance.UpdateUser(id,"inventory", data);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Main"));
+        NetManager.Instance.StopClient();
     }
     
-    [Command]
-    public void ExportStats(int id, string data)
+    [Client]
+    public void Disconnect()
     {
-        SqLiteHandler.Instance.UpdateUser(id,"stats", data);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Main"));
+        NetManager.Instance.StopClient(); 
     }
 }

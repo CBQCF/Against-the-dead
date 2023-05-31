@@ -5,7 +5,7 @@ using Mirror;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MiniMapScript : NetworkBehaviour
+public class MiniMapScript : MonoBehaviour
 {
     private Transform _transform;
 

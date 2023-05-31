@@ -20,10 +20,11 @@ public class TestHorde : NetworkBehaviour
         );
     }
 
-    [Server]
-    void Start()
+    [Command(channel = 0, requiresAuthority = false)]
+    public void HordeInit()
     {
         serverInfo = FindObjectOfType<ServerInfo>();
+        
         for (int i = 0; i < 10; i++)
         {
             SpawnHorde();
