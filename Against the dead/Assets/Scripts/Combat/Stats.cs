@@ -1,26 +1,44 @@
-using System;
+
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-using Telepathy;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
+using Random = System.Random;
 
 public class Stats : NetworkBehaviour
 {
     [SyncVar(hook = nameof(UpdateHealthBar))]
     public int health;
+
     [SyncVar(hook = nameof(UpdateFoodBar))]
     public int food;
-    
+
     public int playerKill;
-    public int normalKill; 
+    public int normalKill;
     public int crawlerKill;
 
     public Bar healthBar;
     public BarFood foodBar;
+
+    public int[] dropTable;
+    public int[] probabilityTable;
     
-    [Server]
+    private int choseDrop()
+    {
+        if (probabilityTable.Length != dropTable.Length) return -1;
+        List<int> drops = new List<int>();
+        for (int i = 0; i < dropTable.Length; i++)
+        {
+            for (int j = 0; j < probabilityTable[i]; j++)
+            {
+                drops.Add(dropTable[i]);
+            }
+        }
+
+        if (drops.Count == 0) return -1;
+        return drops[UnityEngine.Random.Range(0, drops.Count)];
+    }
+
+        [Server]
     private void Awake()
     {
         health = 100;
@@ -64,10 +82,20 @@ public class Stats : NetworkBehaviour
     {
         if (gameObject.CompareTag("Player"))
         {
+            gameObject.GetComponent<Player>().inventory = new List<Item>(); // Empty player inventory
+            
             gameObject.GetComponent<Player>().DisconnectRPC();
         }
         else
         {
+            int drop = choseDrop();
+            
+            if (drop > 0)
+            {
+                GameObject instanceDrop = Instantiate(NetManager.Instance.spawnPrefabs[drop], transform.position + Vector3.up * 2, Quaternion.identity);
+                NetworkServer.Spawn(instanceDrop);
+                instanceDrop.GetComponent<Item>().VisibleOnGround(true);
+            }   
             NetworkServer.Destroy(this.gameObject);
         }
     }

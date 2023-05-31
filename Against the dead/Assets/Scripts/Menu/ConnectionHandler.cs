@@ -120,8 +120,6 @@ public class ConnectionHandler : MonoBehaviour
             
         }
         else
-        {
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
-        }
+        { }
     }
 }

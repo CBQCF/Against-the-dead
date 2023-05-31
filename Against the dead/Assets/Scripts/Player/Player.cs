@@ -136,19 +136,26 @@ public class Player : NetworkBehaviour
     [TargetRpc]
     public void DisconnectRPC()
     {
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
-        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Main"));
+        NetManager.Instance.DisconnectExport(netIdentity);
         NetManager.Destroy(gameObject);
         NetManager.Instance.StopClient();
+        NetManager.Instance.Reset();
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Menu"));
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Main"));
+        SceneManager.LoadScene("Menu");
+        
     }
     
     [Client]
     public void Disconnect()
     {
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Menu"));
-        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Main"));
+        NetManager.Instance.DisconnectExport(netIdentity);
         NetManager.Destroy(gameObject);
-        NetManager.Instance.StopClient(); 
+        NetManager.Instance.StopClient();
+        NetManager.Instance.Reset();
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Menu"));
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Main"));
+        SceneManager.LoadScene("Menu");
     }
     
     [Command]
@@ -169,5 +176,11 @@ public class Player : NetworkBehaviour
                 }
             }
         }
+    }
+
+    [Command]
+    private void DisconnectExport(NetworkIdentity identity)
+    {
+        NetManager.Instance.DisconnectExport(identity);
     }
 }

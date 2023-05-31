@@ -49,6 +49,12 @@ public class NetManager : NetworkManager
 
 
     [Server]
+    public void DisconnectExport(NetworkIdentity identity)
+    {
+        PlayerExport(identity.connectionToClient);
+    }
+    
+    [Server]
     void Update()
     {
         time += Time.deltaTime;

@@ -1054,6 +1054,8 @@ MonoBehaviour:
   crawlerKill: 0
   healthBar: {fileID: 0}
   foodBar: {fileID: 0}
+  dropTable: ffffffff0500000006000000
+  probabilityTable: 140000000100000003000000
 --- !u!95 &76753997730115131
 Animator:
   serializedVersion: 5
