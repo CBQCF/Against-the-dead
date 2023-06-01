@@ -18,7 +18,7 @@ public class ZombieCharacterControl : NetworkBehaviour
     private float timeSinceLastAttack = 0f;
     public float mMoveSpeed = 6;
     public float mTurnSpeed = 200;
-    public float mDetectionDistance = 40;
+    public float mDetectionDistance = 70;
     public float mAttackDistance = 2;
     public Animator mAnimator;
 
