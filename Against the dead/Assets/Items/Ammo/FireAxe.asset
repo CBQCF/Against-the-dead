@@ -12,11 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a112644cd8af4073983a796443f28e85, type: 3}
   m_Name: FireAxe
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
-  type: 0
-  actionType: 3
-  range: {x: 3, y: 3, z: 3}
-  maxStack: 0
-  image: {fileID: 0}
-  Damage: 80
+  Damage: 70
   AmmoRange: 1
