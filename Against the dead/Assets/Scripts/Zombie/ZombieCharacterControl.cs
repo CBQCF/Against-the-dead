@@ -29,6 +29,7 @@ public class ZombieCharacterControl : NetworkBehaviour
     private readonly float _mInterpolation = 10;
     private Vector3 _mCurrentDirection = Vector3.zero;
     public ServerInfo serverInfo;
+    public AudioSource death;
 
     public GameObject target;
     
