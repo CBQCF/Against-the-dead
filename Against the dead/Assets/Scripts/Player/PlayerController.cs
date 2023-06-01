@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : NetworkBehaviour
 {
-    private const float Speed = 6f; 
+    private const float Speed = 7f; 
     private const float JumpSpeed = 8f;
     public static float MouseSensitivity = 3f;
     private const float MaxHeadTurn = 60f;

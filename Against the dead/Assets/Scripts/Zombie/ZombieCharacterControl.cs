@@ -12,11 +12,11 @@ public class ZombieCharacterControl : NetworkBehaviour
     }
 
     public float attackDelay = 1.0f; // Délai avant la première attaque
-    public float attackInterval = 1.5f; // Intervalle entre les attaques successives
+    public float attackInterval = 1.3f; // Intervalle entre les attaques successives
 
     private bool isAttacking = false;
     private float timeSinceLastAttack = 0f;
-    public float mMoveSpeed = 6;
+    public float mMoveSpeed = 4.5f;
     public float mTurnSpeed = 200;
     public float mDetectionDistance = 70;
     public float mAttackDistance = 2;

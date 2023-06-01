@@ -26,7 +26,7 @@ public class PlayerShoot : MonoBehaviour
     
     void Shoot()
     {
-        //muzzleFlash.Play();
+        // mettre son sam
         if (Physics.Raycast(_fpsCam.transform.position, _fpsCam.transform.forward, out var hit, range))
         {
             Stats target = hit.transform.GetComponent<Stats>();
