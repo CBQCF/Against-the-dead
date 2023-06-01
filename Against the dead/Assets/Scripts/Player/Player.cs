@@ -167,7 +167,7 @@ public class Player : NetworkBehaviour
             Stats targetStats = NetworkServer.spawned[target].GetComponent<Stats>();
             WeaponData weaponData = NetworkServer.spawned[weapon].GetComponent<WeaponData>();
             int range = weaponData is not null ? weaponData.ammo.AmmoRange : 1;
-            int damage = weaponData is not null ? weaponData.ammo.Damage : 10;
+            int damage = weaponData is not null ? weaponData.ammo.Damage : 3;
             if (targetStats is not null && Vector3.Distance(transform.position, targetStats.transform.position) <= range)
             {
                 if (targetStats.DealDamage(damage))
