@@ -27,6 +27,15 @@ public class PlayerShoot : MonoBehaviour
     void Shoot()
     {
         // mettre son sam
+        if (player.inventoryManager.GetSelectedItem(false).UID == 1 ||
+            player.inventoryManager.GetSelectedItem(false).UID == 2)
+            FindObjectOfType<AudioManager>().Play("mitraillette");
+        if (player.inventoryManager.GetSelectedItem(false).UID == 3)
+            FindObjectOfType<AudioManager>().Play("hache");
+        if (player.inventoryManager.GetSelectedItem(false).UID == 4)
+            FindObjectOfType<AudioManager>().Play("gun");
+        if (player.inventoryManager.GetSelectedItem(false).UID == 5)
+            FindObjectOfType<AudioManager>().Play("shotgun");
         if (Physics.Raycast(_fpsCam.transform.position, _fpsCam.transform.forward, out var hit, range))
         {
             Stats target = hit.transform.GetComponent<Stats>();
