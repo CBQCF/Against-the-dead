@@ -95,7 +95,8 @@ public class Stats : NetworkBehaviour
                 GameObject instanceDrop = Instantiate(NetManager.Instance.spawnPrefabs[drop], transform.position + Vector3.up * 2, Quaternion.identity);
                 NetworkServer.Spawn(instanceDrop);
                 instanceDrop.GetComponent<Item>().VisibleOnGround(true);
-            }   
+            }
+            //FindObjectOfType<AudioManager>().Play("zombie.death");
             NetworkServer.Destroy(this.gameObject);
         }
     }
