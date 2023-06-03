@@ -61,8 +61,6 @@ public class Player : NetworkBehaviour
 
         uiReference.darkBackground.GetComponent<BackgroundDrop>().inventoryManager = inventoryManager;
 
-        uiReference.debug.GetComponent<DebugItem>().inventoryManager = inventoryManager;
-
         NetworkClient.RegisterHandler<InventoryManager.ResponseInventoryAction>(inventoryManager.OnInventoryResponse);
         
         inventoryManager.player = this; //*
@@ -162,10 +160,11 @@ public class Player : NetworkBehaviour
     public void ShootCommand(uint target, uint shooter, uint weapon)
     {
         Player shooterPlayer = NetworkServer.spawned[shooter].GetComponent<Player>();
-        if (shooterPlayer.inventory.Exists(data => data.netId == weapon)) // Check if player has the weapon
+        if (weapon == 0 || shooterPlayer.inventory.Exists(data => data.netId == weapon)) // Check if player has the weapon
         {
+            WeaponData weaponData = null;
+            if(weapon > 0 ) weaponData = NetworkServer.spawned[weapon].GetComponent<WeaponData>();
             Stats targetStats = NetworkServer.spawned[target].GetComponent<Stats>();
-            WeaponData weaponData = NetworkServer.spawned[weapon].GetComponent<WeaponData>();
             int range = weaponData is not null ? weaponData.ammo.AmmoRange : 2;
             int damage = weaponData is not null ? weaponData.ammo.Damage : 10;
             if (targetStats is not null && Vector3.Distance(transform.position, targetStats.transform.position) <= range)

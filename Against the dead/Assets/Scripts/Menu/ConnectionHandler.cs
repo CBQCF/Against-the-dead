@@ -17,6 +17,8 @@ public class ConnectionHandler : MonoBehaviour
     public TMP_InputField serverPort;
     public TMP_InputField serverPassword;
 
+    public Camera menuCamera;
+    
     private NetManager _manager;
     private KcpTransport _transport;
     private Auth _authenticator;
@@ -106,6 +108,7 @@ public class ConnectionHandler : MonoBehaviour
             SceneManager.SetActiveScene(SceneManager.GetSceneByName("Main"));
             if (!NetworkClient.ready)
             {
+                Destroy(menuCamera.gameObject);
                 NetworkClient.Ready();
                 if (NetworkClient.localPlayer == null)
                 {
@@ -119,7 +122,5 @@ public class ConnectionHandler : MonoBehaviour
             }
             
         }
-        else
-        { }
     }
 }

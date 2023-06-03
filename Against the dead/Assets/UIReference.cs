@@ -16,6 +16,4 @@ public class UIReference : MonoBehaviour
 
     public GameObject crossHair;
     public GameObject miniMap;
-
-    public GameObject debug; //TO REMOVE
 }

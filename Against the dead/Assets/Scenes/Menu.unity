@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1381,6 +1381,7 @@ MonoBehaviour:
   serverIP: {fileID: 469041336}
   serverPort: {fileID: 212655830}
   serverPassword: {fileID: 1467200718}
+  menuCamera: {fileID: 1735243583}
 --- !u!4 &408206336
 Transform:
   m_ObjectHideFlags: 0
@@ -8359,7 +8360,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1735243581}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!1 &1754221101
 GameObject:
   m_ObjectHideFlags: 0

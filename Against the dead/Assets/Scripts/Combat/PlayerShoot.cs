@@ -26,22 +26,27 @@ public class PlayerShoot : MonoBehaviour
     
     void Shoot()
     {
-        // mettre son sam
-        if (player.inventoryManager.GetSelectedItem(false).UID == 1 ||
-            player.inventoryManager.GetSelectedItem(false).UID == 2)
-            FindObjectOfType<AudioManager>().Play("mitraillette");
-        if (player.inventoryManager.GetSelectedItem(false).UID == 3)
-            FindObjectOfType<AudioManager>().Play("hache");
-        if (player.inventoryManager.GetSelectedItem(false).UID == 4)
-            FindObjectOfType<AudioManager>().Play("gun");
-        if (player.inventoryManager.GetSelectedItem(false).UID == 5)
-            FindObjectOfType<AudioManager>().Play("shotgun");
+        Item selected = player.inventoryManager.GetSelectedItem(false);
+        if (selected is not null)
+        {
+            if (selected.UID == 1 || selected.UID == 2)
+                FindObjectOfType<AudioManager>().Play("mitraillette");
+            else if (selected.UID == 3)
+                FindObjectOfType<AudioManager>().Play("hache");
+            else if (selected.UID == 4)
+                FindObjectOfType<AudioManager>().Play("gun");
+            else if (selected.UID == 5)
+                FindObjectOfType<AudioManager>().Play("shotgun");
+        }
+
         if (Physics.Raycast(_fpsCam.transform.position, _fpsCam.transform.forward, out var hit, range))
         {
             Stats target = hit.transform.GetComponent<Stats>();
             if (target is not null)
             {
-                player.ShootCommand(target.gameObject.GetComponent<NetworkIdentity>().netId, player.netId, player.inventoryManager.GetSelectedItem(false).netId);
+                uint nId = 0;
+                if (selected is not null) nId = selected.netId; 
+                player.ShootCommand(target.gameObject.GetComponent<NetworkIdentity>().netId, player.netId, nId);
             }
         }
     }
